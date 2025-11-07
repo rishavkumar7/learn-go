@@ -1,0 +1,34 @@
+package main
+
+import "fmt"
+
+func main() {
+	// Simple for loop
+	for i := 1; i <= 5; i++ {
+		fmt.Println(i)
+	}
+
+	// Iteration over a slice
+	var fruits = []string{"apple", "mango", "banana"}
+	for key, value := range fruits {
+		fmt.Printf("%v : %v\n", key, value)
+	}
+
+	// Another way to iterate
+	for i := range 5 { // iterates from 0 to 4
+		fmt.Println(i)
+	}
+
+	// While-like for loop
+	j := 1
+	for j <= 5 {
+		fmt.Println(j)
+		j++
+	}
+
+	// Infinite loop until a break
+	for {
+		fmt.Println("Infinite loop")
+		// always use a break here
+	}
+}
