@@ -1,0 +1,72 @@
+package main
+
+import "fmt"
+
+func main() {
+	day := "Saturday"
+
+	switch day {
+	case "Monday":
+		fmt.Println("Its a Monday")
+	case "Tuesday":
+		fmt.Println("Its a Tuesday")
+	case "Wednesday":
+		fmt.Println("Its a Wednesday")
+	default:
+		fmt.Println("Another day")
+	}
+
+	switch day {
+	case "Monday", "Tuesday", "Wednesday", "Thursday", "Friday":
+		fmt.Println("It's a weekday")
+	case "Saturday", "Sunday":
+		fmt.Println("It's the weekend")
+	default:
+		fmt.Println("Not a valid day")
+	}
+
+	number := 3
+
+	switch {
+	case number > 0:
+		fmt.Println("Positive number")
+	case number == 0:
+		fmt.Println("Zero")
+	default:
+		fmt.Println("Its neither positive nor zero")
+	}
+
+	num := 1
+
+	switch {
+	case num >= 1:
+		fmt.Println("Greater than or equal to 1")
+		fallthrough
+	case num == 2:
+		fmt.Println("Equal to 2")
+	default:
+		fmt.Println("Less than 1")
+	}
+
+	checkType(42)
+	checkType(3.14)
+	checkType(false)
+	checkType("Rishav Kumar")
+}
+
+func checkType(x interface{}) {
+	switch x.(type) {
+	case int:
+		fmt.Println("Integer type")
+	case string:
+		fmt.Println("String type")
+	case bool:
+		fmt.Println("Boolean type")
+	default:
+		fmt.Println("Another type")
+	}
+}
+
+// We do not use break statements in Go's switch cases as they are implicit.
+// The fallthrough statement is used to continue execution to the next case (without checking following case's condition).
+// We cannot use fallthrough in type switches.
