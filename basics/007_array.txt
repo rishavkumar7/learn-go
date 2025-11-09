@@ -1,0 +1,50 @@
+package main
+
+import "fmt"
+
+func main() {
+	var arr1 [5]int // default initialisation to [0, 0, 0, 0, 0]
+	fmt.Println("arr1 : ", arr1)
+
+	var arr2 [5]int = [5]int{1, 2, 3, 4, 5} // explicit initialisation to [1, 2, 3, 4, 5]
+	fmt.Println("arr2 : ", arr2)
+
+	arr3 := [5]int{10, 20, 30, 40, 50} // shorthand initialisation to [10, 20, 30, 40, 50]
+	fmt.Println("arr3 : ", arr3)
+
+	for i := 0; i < len(arr3); i++ { // len function to get the length of the array
+		fmt.Printf("Element at index %v is %v\n", i, arr3[i])
+	}
+
+	for i, v := range arr3 { // range loop to iterate over the array
+		fmt.Println("Index :", i, "Value : ", v)
+	}
+
+	originalArray := [3]string{"Go", "Python", "Java"}
+	copiedArray := originalArray // assignment by value or passing as argument as value creates a copy
+	copiedArray[0] = "C++"       // modifying copiedArray does not affect originalArray
+	fmt.Println("Orignal Array : ", originalArray)
+	fmt.Println("Copied Array : ", copiedArray)
+
+	pointerArray := &originalArray // creating a pointer to the original array
+	pointerArray[0] = "JavaScript" // modifying pointerArray affects originalArray
+	fmt.Println("Orignal Array : ", originalArray)
+	fmt.Println("Pointer Array : ", *pointerArray)
+
+	var pointerToArray *[3]string = &originalArray // explicit pointer declaration
+	pointerToArray[1] = "Ruby"                     // modifying pointerToArray affects originalArray
+	fmt.Println("Orignal Array : ", originalArray)
+	fmt.Println("Pointer to Array : ", *pointerToArray)
+
+	var multiDimensionalArray [2][3]int = [2][3]int{ // declaring 2d array of size 2x3
+		{1, 2, 3},
+		{4, 5, 6},
+	}
+	fmt.Println("Multi Dimensional Array : ", multiDimensionalArray)
+
+	multiArray := [2][2]string{ // shorthand declaration of 2d array of size 2x2
+		{"a11", "a12"},
+		{"a21", "a22"},
+	}
+	fmt.Println("multiArray : ", multiArray)
+}
