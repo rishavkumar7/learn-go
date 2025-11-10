@@ -9,6 +9,9 @@ func main() {
 	var arr2 [5]int = [5]int{1, 2, 3, 4, 5} // explicit initialisation to [1, 2, 3, 4, 5]
 	fmt.Println("arr2 : ", arr2)
 
+	var arr21 = [5]int{6, 7, 8, 9, 10} // explicit initialisation to [6, 7, 8, 9, 10]
+	fmt.Println("arr21 : ", arr21)
+
 	arr3 := [5]int{10, 20, 30, 40, 50} // shorthand initialisation to [10, 20, 30, 40, 50]
 	fmt.Println("arr3 : ", arr3)
 

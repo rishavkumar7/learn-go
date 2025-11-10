@@ -1,0 +1,69 @@
+package main
+
+import (
+	"fmt"
+	"slices"
+)
+
+func main() {
+	var slice1 []int                 // declared and initialized to nil (nil slice). It does not point to any underlying array. Its length and capacity is 0.
+	fmt.Println("slice1 : ", slice1) // But fmt package prints it as [].
+
+	var slice11 []int = []int{} // declared and initialized to [] (empty slice). It points to an underlying array. Its length and capacity is 0.
+	fmt.Println("slice11 : ", slice11)
+
+	var slice2 []int = []int{1, 2, 3, 4, 5} // explicit initialisation to [1, 2, 3, 4, 5]
+	fmt.Println("slice2 : ", slice2)
+
+	var slice3 = []int{10, 20, 30} // explicit initialisation to [10, 20, 30]
+	fmt.Println("slice3 : ", slice3)
+
+	slice4 := []int{100, 200} // shorthand initialisatiion to [100, 200]
+	fmt.Println("slice4 : ", slice4)
+
+	slice5 := make([]int, 5) // initialisation using make function to [0, 0, 0, 0, 0]
+	fmt.Println("slice5 : ", slice5)
+
+	slice6 := make([]int, len(slice2))
+	copy(slice6, slice2) // copying slice2 to slice6 and slice6 becomes [1, 2, 3, 4, 5]
+	fmt.Println("slice6 : ", slice6)
+
+	slice7 := slice2[1:4] // slicing slice2 from index 1 to 4 (excluding 4) and slice7 becomes [2, 3, 4]
+	fmt.Println("slice7 : ", slice7)
+
+	slice8 := slice2[:3] // slicing slice2 from start to index 3 (excluding 3) and slice8 becomes [1, 2, 3]
+	fmt.Println("slice8 : ", slice8)
+
+	slice9 := slice2[2:] // slicing slice2 from index 2 to end and slice9 becomes [3, 4, 5]
+	fmt.Println("slice9 : ", slice9)
+
+	slice10 := append(slice4, 300, 400) // appending 300 and 400 to slice4 and slice10 becomes [100, 200, 300, 400]
+	fmt.Println("slice10 : ", slice10)
+
+	for i := 0; i < len(slice3); i++ {
+		fmt.Println("slice3[", i, "] : ", slice3[i])
+	}
+
+	for i, v := range slice2 { // iterating slice using range
+		fmt.Println("slice2[", i, "] : ", v)
+	}
+
+	check := slices.Equal(slice6, slice2) // comparing two slices for equality and returns true/false
+	fmt.Println("slice6 and slice2 are equal : ", check)
+
+	slice12 := make([][]int, 3) // declaring a 2D slice with 3 rows
+	for i := 0; i < len(slice12); i++ {
+		slice12[i] = make([]int, i+1) // declaring size of column for each row
+		for j := 0; j < len(slice12[i]); j++ {
+			slice12[i][j] = i + j // assigning values to each element
+		}
+	}
+	fmt.Println("slice12 : ", slice12)
+
+	arr := [5]int{1000, 2000, 3000, 4000, 5000}
+	slice13 := arr[1:4] // creating a slice from an array
+	fmt.Println("slice13 : ", slice13)
+}
+
+// When ranging over or appending to a nil slice, it behaves the same way as an empty slice.
+// While using encoding/json package, nil slice is encoded to null whereas empty slice is encoded to [].
