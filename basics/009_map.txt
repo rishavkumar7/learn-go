@@ -1,0 +1,71 @@
+package main
+
+import "fmt"
+
+func main() {
+	var map1 map[string]int     // declared and its value is nil and we cannot directly append key-value pairs to it.
+	map1 = make(map[string]int) // initialized to empty map
+	map1["one"] = 1
+	map1["two"] = 2
+	map1["three"] = 3
+	fmt.Println("map1 : ", map1)
+
+	var map2 = make(map[string]int) // declared an initialized to empty map
+	map2["x"] = 10
+	map2["y"] = 20
+	map2["z"] = 30
+	fmt.Println("map2 : ", map2)
+
+	var map3 map[string]int = map[string]int{ // declared and initialized with a map literal
+		"A": 1,
+		"B": 2,
+		"C": 3,
+	}
+	fmt.Println("map3 : ", map3)
+
+	var map4 = map[string]int{ // declared and initialized with a map literal
+		"a": 1,
+		"b": 2,
+		"c": 3,
+	}
+	fmt.Println("map4 : ", map4)
+
+	map5 := make(map[string]int) // shorthand for declaring and initializing with empty map
+	map5["alpha"] = 100
+	map5["beta"] = 200
+	map5["gamma"] = 300
+	fmt.Println("map5 : ", map5)
+
+	map6 := map[string]int{ // shorthand for declaring and initializing with a map literal
+		"red":   1,
+		"green": 2,
+		"blue":  3,
+	}
+	fmt.Println("map6 : ", map6)
+
+	val1, ok1 := map6["green"] // returns value if ok = true
+	fmt.Println("Value for key 'green' :", val1, "Found :", ok1)
+
+	val2, ok2 := map6["yellow"] // returns zero value of value's datatype if ok = false
+	fmt.Println("Value for key 'yellow' :", val2, "Found :", ok2)
+
+	delete(map6, "red") // deletes the key-value pair with key "red"
+	fmt.Println("map6 after deleting key 'red' :", map6)
+
+	clear(map6) // removes all key-value pairs from the map
+	fmt.Println("map6 after clearing all key-value pairs :", map6)
+
+	for i, v := range map5 { // iteration in map
+		fmt.Println("Key :", i, "Value :", v)
+	}
+
+	map7 := make(map[string]map[string]int) // nested map
+	map7["one"] = make(map[string]int)
+	map7["one"]["one"] = 11
+	map7["one"]["two"] = 12
+	map7["two"] = make(map[string]int)
+	map7["two"]["one"] = 21
+	fmt.Println("map7 :", map7)
+}
+
+// the key-value pairs in a map are unordered.
