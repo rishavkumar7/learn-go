@@ -1,0 +1,15 @@
+package main
+
+import "fmt"
+
+func main() {
+	message := "Hello World!!"
+
+	for i, v := range message {
+		fmt.Println(i, v)
+		fmt.Printf("Index : %d, Rune : %c, %T\n", i, v, v)
+	}
+}
+
+// Runes are alias for int32 that represent a single unicode point.
+// initially the unicode of the runes are printed unless the character format is specifically mentioned to print.
