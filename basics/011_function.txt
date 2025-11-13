@@ -1,0 +1,54 @@
+package main
+
+import "fmt"
+
+func main() {
+	var greet1 func(string)      // declared with function type but not initialized. greet1 is nil currently.
+	greet1 = func(name string) { // assigned an anonymous function to greet1. Greet1 stores the reference to this anonymous function.
+		fmt.Println("Hello, " + name)
+	}
+	greet1("Rkpro")
+
+	var greet2 = func(name string) { // declared and initialized greet2 with an anonymous function.
+		fmt.Println("Hello, " + name)
+	}
+	greet2("Rikpro")
+
+	greet3 := func(name string) { // shorthand declaration and initialization of greet3 with an anonymous function.
+		fmt.Println("Hello, " + name)
+	}
+	greet3("Rishav")
+
+	fmt.Println(add(1, 2)) // calling named function add
+
+	func(x, y int) { // immediately invoked function expression (IIFE)
+		fmt.Println(x * y)
+	}(3, 4)
+
+	add1 := add            // assigning function to a variable
+	result := add1(10, 20) // calling the function using the variable and storing the result in some other variable
+	fmt.Println(result)
+
+	fmt.Println(performOperation(5, 6, add)) // passing function as an argument
+
+	multiplyByTwo := multiplyByFactor(2) // returning a function from another function
+	fmt.Println(multiplyByTwo(10))
+}
+
+func add(a int, b int) int {
+	return a + b
+}
+
+func performOperation(x int, y int, operation func(int, int) int) int {
+	return operation(x, y)
+}
+
+func multiplyByFactor(factor int) func(int) int {
+	return func(x int) int {
+		return x * factor
+	}
+}
+
+// If the name of the function begins with the capital letter, it is an exported function and can be accessed from other packages.
+// If it begins with a lowercase letter, it is unexported and can only be accessed within the same package.
+// Functions are first-class citizens in Go, meaning they can be assigned to variables, passed as arguments, and returned from other functions.
