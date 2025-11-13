@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func main() {
 	var greet1 func(string)      // declared with function type but not initialized. greet1 is nil currently.
@@ -33,6 +36,27 @@ func main() {
 
 	multiplyByTwo := multiplyByFactor(2) // returning a function from another function
 	fmt.Println(multiplyByTwo(10))
+
+	message, err := compareNumbers(5, 10) // multiple return values
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Println(message)
+	}
+
+	q, r := division(10, 3)
+	fmt.Printf("Quotient: %d, Remainder: %d\n", q, r)
+
+	messageSum1, total1 := sum("The total sum is :", 1, 2, 3, 4, 5)
+	fmt.Println(messageSum1, total1)
+
+	arr := [3]int{10, 20, 30}
+	messageSum2, total2 := sum("The total sum of array is :", arr[:]...) // unpaking and passing an array as variadic argument
+	fmt.Println(messageSum2, total2)
+
+	slice := []int{15, 25, 35}
+	messageSum3, total3 := sum("The total sum of slice is :", slice...) // unpaking and passing a slice as variadic argument
+	fmt.Println(messageSum3, total3)
 }
 
 func add(a int, b int) int {
@@ -49,6 +73,31 @@ func multiplyByFactor(factor int) func(int) int {
 	}
 }
 
+func compareNumbers(a int, b int) (string, error) {
+	if a > b {
+		return "a is greater than b", nil
+	} else if a < b {
+		return "a is less than b", nil
+	} else {
+		return "", errors.New("a is equal to b")
+	}
+}
+
+func division(a, b int) (quotient int, remainder int) { // named return values
+	quotient = a / b
+	remainder = a % b
+	return // returns quotient and remainder implicitly
+}
+
+func sum(statement string, numbers ...int) (string, int) { // variadic function (function with a variadic parameter)
+	total := 0
+	for _, val := range numbers {
+		total += val
+	}
+	return statement, total
+}
+
 // If the name of the function begins with the capital letter, it is an exported function and can be accessed from other packages.
 // If it begins with a lowercase letter, it is unexported and can only be accessed within the same package.
 // Functions are first-class citizens in Go, meaning they can be assigned to variables, passed as arguments, and returned from other functions.
+// The variadic parameter must be the last parameter in the function. Variadic parameter is a slice of the specified type.

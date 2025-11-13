@@ -61,8 +61,11 @@ func main() {
 	fmt.Println("slice12 : ", slice12)
 
 	arr := [5]int{1000, 2000, 3000, 4000, 5000}
-	slice13 := arr[1:4] // creating a slice from an array
+	slice13 := arr[1:4] // creating a slice from an array with specified indices
 	fmt.Println("slice13 : ", slice13)
+
+	slice14 := arr[:] // creating a slice from the entire array
+	fmt.Println("slice14 : ", slice14)
 }
 
 // When ranging over or appending to a nil slice, it behaves the same way as an empty slice.
