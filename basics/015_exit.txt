@@ -1,0 +1,37 @@
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	fmt.Println("Starting the main function.")
+
+	process1()
+
+	process2()
+
+	fmt.Println("Ending the main function.")
+}
+
+func process1() { // exits immediately and no following code is executed.
+	fmt.Println("Beginning process1.")
+
+	os.Exit(1)
+
+	fmt.Println("Ending process1.")
+}
+
+func process2() { // defer will not run here.
+	fmt.Println("Beginning process2.")
+
+	defer fmt.Println("Deferred in process2.")
+
+	os.Exit(1)
+
+	fmt.Println("Ending process2.")
+}
+
+// Exit code zero is used to indicate successful completion of a program. Non-zero exit codes indicate that an error occurred.
+// Exit will bypass the defer-panic-recover mechanism and end the program immediately.
