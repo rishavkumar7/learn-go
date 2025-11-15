@@ -1,0 +1,35 @@
+package main
+
+import "fmt"
+
+func main() {
+	process1(10) // Normal execution without panic
+	process1(-3) // This will cause a panic
+
+	process2(10) // Normal execution without panic
+	process2(-3) // This will cause a panic, but defers will execute in LIFO order before panic
+}
+
+func process1(input int) {
+	if input < 0 {
+		fmt.Println("Before panic")
+		panic("Negative input not allowed")
+		// After panic, the following lines will not execute
+	}
+
+	fmt.Println("Processing:", input)
+}
+
+func process2(input int) {
+	defer fmt.Println("First defer executed")
+	defer fmt.Println("Second defer executed")
+
+	if input < 0 {
+		fmt.Println("Before panic")
+		panic("Negative input not allowed")
+	}
+
+	fmt.Println("Processing:", input)
+}
+
+// panic can take any type as an argument as its parameter is of type interface{}
