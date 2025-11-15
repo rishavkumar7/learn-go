@@ -1,0 +1,20 @@
+package main
+
+import "fmt"
+
+func main() {
+	process()
+	fmt.Println("Returned to main function.")
+}
+
+func process() {
+	defer func() { // defer is used as recover must be called after a panic.
+		if r := recover(); r != nil { // recover returns nil if there was no panic otherwise it returns the argument passed to panic.
+			fmt.Println("Recovered from panic:", r)
+		}
+	}()
+
+	fmt.Println("Starting process...")
+	panic("Something went wrong!")
+	fmt.Println("Ending process...") // This line will never be reached when panic occurs.
+}
