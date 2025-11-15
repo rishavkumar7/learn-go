@@ -1,0 +1,26 @@
+package main
+
+import "fmt"
+
+func init() {
+	fmt.Println("First init function begin executed.")
+}
+
+func main() {
+	fmt.Println("Main function being executed.")
+}
+
+func init() {
+	fmt.Println("Second init function being executed.")
+}
+
+func init() {
+	fmt.Println("Third init function being executed.")
+}
+
+// init function is used to perform the initialisation task for a package before using that package.
+// init function takes no parameters and returns nothing.
+// init function gets executed before the main function.
+// init function gets executed only once for every imported package even if the package is imported multiple times.
+// init function for a single package gets executed in sequencial order in a single file. But multiple files in a single package are selected in alphabetical order of filename.
+// init function is used for initialising variables, performing setup operations, registering configuation/components, initialising state required for a package to function correctly.
