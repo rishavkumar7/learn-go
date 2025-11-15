@@ -1,0 +1,31 @@
+package main
+
+import "fmt"
+
+func main() {
+	process1()
+	process2()
+	process3(10)
+}
+
+func process1() { // defer executes at the end of the surrounding function or before a return or before a panic
+	defer fmt.Println("Process 1: Deferred call executed")
+	fmt.Println("Process 1: Start")
+}
+
+func process2() { // multiple defers get executed in LIFO order
+	defer fmt.Println("Process 2: First deferred call executed")
+	defer fmt.Println("Process 2: Second deferred call executed")
+	defer fmt.Println("Process 2: Third deferred call executed")
+	fmt.Println("Process 2: Start")
+}
+
+func process3(n int) { // defer captures the arguments at the time of defer statement being registered and not at execution time
+	defer fmt.Println("Process 3: Deferred call with argument:", n)
+	defer fmt.Println("Process 3: First deferred call executed")
+	defer fmt.Println("Process 3: Second deferred call executed")
+	defer fmt.Println("Process 3: Third deferred call executed")
+	n++
+	fmt.Println("Process 3: Start")
+	fmt.Println("Process 3: Argument after increment:", n)
+}
