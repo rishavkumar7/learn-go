@@ -1,0 +1,21 @@
+package main
+
+import "fmt"
+
+func main() {
+	var ptr *int
+	a := 10
+	ptr = &a // referencing : address of a is allocated to ptr
+
+	fmt.Println(a)
+	fmt.Println(&a)
+	fmt.Println(ptr)
+	fmt.Println(*ptr) // dereferencing : refer to the value of the variable where ptr is pointing to.
+
+	modifyValue(ptr)
+	fmt.Println(a)
+}
+
+func modifyValue(p *int) { // modifies the original variable whose address is passed in p.
+	*p++
+}
