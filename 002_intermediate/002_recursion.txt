@@ -1,0 +1,29 @@
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Factorial of 5 :", factorial(5))
+	fmt.Println("Factorial of 10 :", factorial(10))
+
+	fmt.Println("Sum of digits of 5 :", sumOfDigits(5))
+	fmt.Println("Sum of digits of 90218 :", sumOfDigits(90218))
+}
+
+func factorial(x int) int {
+	if x == 0 {
+		return 1
+	}
+
+	return x * factorial(x-1)
+}
+
+func sumOfDigits(x int) int {
+	if x < 10 {
+		return x
+	}
+
+	return (x % 10) + sumOfDigits(x/10)
+}
+
+// Recursion is function calling itself
