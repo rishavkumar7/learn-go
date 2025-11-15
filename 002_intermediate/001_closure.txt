@@ -1,0 +1,49 @@
+package main
+
+import "fmt"
+
+func main() {
+	sequence1 := adder() // initial value of i = 0 for sequence 1
+
+	fmt.Println("First : ", sequence1()) // after adding i = 1 for sequence 1
+	fmt.Println("First : ", sequence1()) // after adding i = 2 for sequence 1
+	fmt.Println("First : ", sequence1()) // after adding i = 3 for sequence 1
+
+	sequence2 := adder() // initial value of i = 0 for sequence 2
+
+	fmt.Println("First : ", sequence1())  // after adding i = 4 for sequence 1
+	fmt.Println("Second : ", sequence2()) // after adding i = 1 for sequence 2
+	fmt.Println("Second : ", sequence2()) // after adding i = 2 for sequence 2
+	fmt.Println("First : ", sequence1())  // after adding i = 5 for sequence 1
+	fmt.Println("Second : ", sequence2()) // after adding i = 3 for sequence 2
+	fmt.Println("First : ", sequence1())  // after adding i = 6 for sequence 1
+
+	sequence3 := subtracter() // initial value of j = 100 for sequence 3
+
+	fmt.Println("Third : ", sequence3(7))  // after subtracting j = 93 for sequence 3
+	fmt.Println("Third : ", sequence3(4))  // after subtracting j = 89 for sequence 3
+	fmt.Println("Third : ", sequence3(23)) // after subtracting j = 66 for sequence 3
+}
+
+func adder() func() int {
+	i := 0
+	fmt.Println("Initial value of i : ", i)
+
+	return func() int {
+		i++
+		fmt.Println("increasing value of i by 1")
+		return i
+	}
+}
+
+func subtracter() func(int) int {
+	j := 100
+	fmt.Println("Initial Value of j : ", j)
+	return func(x int) int {
+		j -= x
+		fmt.Println("Decreading value of j by", x)
+		return j
+	}
+}
+
+// Closures are concept that allows functions to capture and manipulate the variables which are defined outside of their body.
