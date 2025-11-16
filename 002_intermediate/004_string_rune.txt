@@ -1,0 +1,152 @@
+package main
+
+import (
+	"fmt"
+	"unicode/utf8"
+)
+
+func main() {
+	var s1 string // s1 = "" as the string is initialised to its zero value which is an empty string
+	s1 = "Rishav" // s1 = "Rishav"
+	fmt.Println("s1 : ", s1)
+	fmt.Printf("s1 : %s\n", s1) // %s is specifically used for string
+
+	var s2 = "Ravi" // s2 = "Ravi"
+	fmt.Println("s2 : ", s2)
+
+	s3 := "Shivangi" // s3 = "Shivangi"
+	fmt.Println("s3 : ", s3)
+
+	var s4 []byte = []byte("Virat") // s4 = [86 105 114 97 116] as its stores as a slice of byte.
+	fmt.Println("s4 : ", s4)
+	fmt.Printf("s4 : %s\n", s4)
+
+	var s5 []rune = []rune("Dhoni") // s5 = [68 104 111 110 105] as its stored as a slice of rune.
+	fmt.Println("s5 : ", s5)
+
+	for _, v := range s4 { // this prints out - Virat
+		fmt.Printf("%c", v)
+	}
+	fmt.Println()
+
+	for _, v := range s5 { // this prints out - Dhoni
+		fmt.Printf("%c", v)
+	}
+	fmt.Println()
+
+	//_________________________________________________________________________________________________________________________
+
+	str1 := "😊1" // a string is a collection of bytes (a byte is of type uint8)
+
+	fmt.Println(str1)                                                  // 😊1
+	fmt.Println("Length of str1 : ", len(str1))                        // counts the number of bytes in str1. length = 5 bytes, 4 bytes for smile emoji and 1 byte for character 1.
+	fmt.Println("Rune count in str1 : ", utf8.RuneCountInString(str1)) // counts the number of runes in string str1. length = 2 runes, 1 rune for smile emoji and 1 rune for character 1.
+	fmt.Printf("%v and %T\n", str1[0], str1[0])                        // str[i] represents the byte code for index i in the string.
+	fmt.Printf("%v and %T\n", str1[1], str1[1])
+	fmt.Printf("%v and %T\n", str1[2], str1[2])
+	fmt.Printf("%v and %T\n", str1[3], str1[3])
+	fmt.Printf("%v and %T\n", str1[4], str1[4])
+
+	for i, v := range str1 { // here i is of type int and v is a rune (a rune is of type int32)
+		fmt.Printf("%T and %T\n", i, v)
+	}
+
+	str2 := []byte(str1) // converting the string to the slice of bytes ([]uint8)
+	fmt.Println("Length of str2 : ", len(str2))
+	fmt.Printf("%v and %T\n", str2[0], str2[0])
+	fmt.Printf("%v and %T\n", str2[1], str2[1])
+	fmt.Printf("%v and %T\n", str2[2], str2[2])
+	fmt.Printf("%v and %T\n", str2[3], str2[3])
+	fmt.Printf("%v and %T\n", str2[4], str2[4])
+
+	str3 := []rune(str1) // converting the string to the slice of runes ([]int32)
+	fmt.Println("Length of str3 : ", len(str3))
+	fmt.Printf("%c and %v and %T\n", str3[0], str3[0], str3[0])
+	fmt.Printf("%c and %v and %T\n", str3[1], str3[1], str3[1])
+
+	//_________________________________________________________________________________________________________________________
+
+	message1 := "Hello Go!" // initialised a string using double quotes
+	fmt.Println("message1 : ", message1)
+
+	message2 := `Hello Go!` // initialised a string using backticks
+	fmt.Println("message2 : ", message2)
+
+	message3 := "Hello \nGo!" // \n is used for newline and its picked as a single character inside the double quotes.
+	fmt.Println("message3 : ", message3)
+
+	message4 := "Hello \tGo!" // \t is used for tab space and its picked as a single character inside the double quotes.
+	fmt.Println("message4 : ", message4)
+
+	message5 := "Hello \rGo!" // \r is used for "carriage return" which brings the cursor the the beginning of the same line and its picked as a single character inside the double quotes.
+	fmt.Println("message5 : ", message5)
+
+	message6 := `Hello \nGo!` // \n will not be used as a newline inside the backticks. Instead its picked as two seperate characters '\' and 'n'.
+	fmt.Println("message6 : ", message6)
+
+	fmt.Println("Length of message1 : ", len(message1)) // as string is a slice of bytes therefore len() function can be used to find the length of the string. It returns the number of bytes in the string.
+	fmt.Println("Length of message3 : ", len(message3)) // '\n' is counted as a single character inside double quotes.
+	fmt.Println("Length of message6 : ", len(message6)) // '\' and 'n' are counted as two seperate characters inside backticks.
+
+	for _, v := range message3 {
+		fmt.Printf("The hexadecimal value of %c (type %T) is %x\n", v, v, v) // %x represents the hexadecimal value of the character v.
+	}
+
+	//_________________________________________________________________________________________________________________________
+
+	msg1 := "Rishav"
+	msg2 := "Kumar"
+	fmt.Println(msg1 + msg2) // strings are concatenated without spaces.
+
+	msg3 := "apple"
+	msg4 := "app"
+	msg5 := "Apple"
+	msg6 := "App"
+	fmt.Println(msg3 > msg4) // true. strings are compared in lexicographical order. Lowercase alphabets > uppercase alphabets as Lowercase alphabets have higher ASCII value than uppercase alphabets.
+	fmt.Println(msg3 > msg5) // true
+	fmt.Println(msg3 > msg6) // true
+	fmt.Println(msg4 > msg5) // true
+	fmt.Println(msg4 > msg6) // true
+	fmt.Println(msg5 > msg6) // true
+
+	msg7 := "apple"
+	fmt.Println("Are msg3 and msg7 equal : ", msg3 == msg7) // true
+
+	//_________________________________________________________________________________________________________________________
+
+	var rune1 rune // rune1 = 0, declared but not initialised so it contains the zero value of int32 type.
+	rune1 = 'a'    // rune1 = 97, initialised with the ASCII value of 'a'
+	fmt.Printf("rune1 : %v and %c\n", rune1, rune1)
+
+	var rune2 = 'b' // rune2 = 98
+	fmt.Printf("rune2 : %v and %c\n", rune2, rune2)
+
+	rune3 := 'c' // rune3 = 'c'
+	fmt.Printf("rune3 : %v and %c\n", rune3, rune3)
+
+	strRune := string(rune1) // strRune = "a", rune is converted to string
+	fmt.Printf("strRune : %v and %T\n", strRune, strRune)
+
+	byteRune := []byte(string(rune2)) // byteRune = [98], rune is converted to []byte via string
+	fmt.Printf("byteRune : %v and %T\n", byteRune, byteRune)
+}
+
+// strings are immutable. It means we cannot append, modify the string after its initialised.
+// rune is an alias for int32 and can be used to store a unicode point. In simple words, a rune can store a character.
+
+// Smile Emoji
+// collection of 4 bytes of UTF-8 codes for smile emoji
+// 0xF0 0x9F 0x98 0x8A
+// F0 9F 98 8A
+// 11110000 10011111 10011000 10001010
+// 11110-000 10-011111 10-011000 10-001010
+// 000011111011000001010
+// 0 0001 1111 0110 0000 1010
+// 01F60A
+// U+1F60A
+// hexadecimal value for unicode point for smile emoji
+
+// 000011111011000001010
+// 2+8+512+1024+4096*31
+// 128522
+// decimal value for unicode point for smile emoji
