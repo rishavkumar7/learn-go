@@ -1,0 +1,127 @@
+package main
+
+import "fmt"
+
+type Person struct { // declaring struct
+	firstName string
+	lastName  string
+	age       int
+	contact   Contact // struct embedding
+	Address           // struct embedding with anonymous field
+}
+
+type Contact struct {
+	phone string
+	email string
+}
+
+type Address struct {
+	city    string
+	state   string
+	country string
+}
+
+func main() {
+
+	var p1 Person // declaring p1
+	p1 = Person{  // initialising p1
+		firstName: "Rishav",
+		lastName:  "Kumar",
+		age:       26,
+		contact: Contact{
+			phone: "9988776655",
+			email: "rishavkumar@gmail.com", // note the comma at the end of the last field.
+		},
+		Address: Address{
+			city:    "Jamshedpur",
+			state:   "Jharkhand",
+			country: "India", // note the comma at the end of the last field.
+		}, // note the comma at the end of the last field.
+	}
+	fmt.Println("p1 :", p1)
+	fmt.Println("p1 contact phone :", p1.contact.phone) // accessed phone via contact. Cannot directly access phone.
+	fmt.Println("p1 Address city :", p1.Address.city)   // access city via address.
+	fmt.Println("p1 city :", p1.city)                   // accessed city directly (only allowed for anonymous field)
+
+	var p2 = Person{ // explicitly declaring and initialising p2
+		firstName: "Ravi",
+		lastName:  "Kumar",
+		age:       28,
+		contact: Contact{
+			"1122334455",
+			"ravikumar@gmail.com",
+		},
+		Address: Address{
+			city:    "Jamshedpur",
+			state:   "Jharkhand",
+			country: "India",
+		},
+	}
+	fmt.Println("p2 :", p2)
+
+	p3 := Person{ // shorthand declaration and initialisation of p3
+		firstName: "Shivangi",
+		age:       23,
+		contact: Contact{
+			email: "shivangi@gmail.com",
+		},
+		Address: Address{
+			city:    "Jamshedpur",
+			state:   "Jharkhand",
+			country: "India",
+		},
+	}
+	fmt.Println("p3 :", p3)
+
+	p4 := Person{ // another way to write string literals without field-names. Order of field-values must be correct here.
+		"Virat",
+		"Kohli",
+		37,
+		Contact{
+			"9966227744",
+			"viratkohli@gmail.com",
+		},
+		Address{
+			city:    "Delhi",
+			country: "India",
+		},
+	}
+	fmt.Println("p4 :", p4)
+	fmt.Println("p4 lastName :", p4.lastName)
+	fmt.Println("p4 contact email :", p4.contact.email)
+
+	p5 := Person{
+		firstName: "Rhea",
+		Address: Address{
+			"Kolkata",
+			"West Bengal",
+			"India",
+		},
+	}
+	fmt.Println("p5 firstName :", p5.firstName) // fetching specific field in a struct.
+	fmt.Println("p5 lastName :", p5.lastName)
+	fmt.Println("p5 age :", p5.age)
+	fmt.Println("p5 state :", p5.state)
+
+	p6 := struct { // Anonymous structs
+		fullName string
+		gender   string
+		Contact
+		address Address
+	}{
+		fullName: "Rohit Sharma",
+		gender:   "Male",
+		Contact: Contact{
+			"2244668800",
+			"rohitsharma@gmail.com",
+		},
+		address: Address{
+			city: "Mumbai",
+		},
+	}
+	fmt.Println("p6 :", p6)
+	fmt.Println("p6 phone :", p6.phone) // now phone is directly accessible as Contact is embedded as an anonymous field.
+}
+
+// type is declared outside the function so that its globally available within the package.
+// while initialising with struct literal, there can't be a case where few fields include the field-names and others don't include field-names. Either every field includes field-names or every field ignores field-names.
