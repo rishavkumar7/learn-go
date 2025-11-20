@@ -1,0 +1,85 @@
+package main
+
+import "fmt"
+
+type Shape1 struct { // direct access of Rectangle's methods are not possible.
+	rect Rectangle
+}
+
+type Shape2 struct { // direct access of Rectangle's methods are possible.
+	Rectangle
+}
+
+type Rectangle struct {
+	length float64
+	width  float64
+}
+
+func (r Rectangle) Area() float64 { // r is the value instance of the Rectangle struct. (Method of Rectangle struct with value receiver)
+	return r.length * r.width
+}
+
+func (r *Rectangle) Scale(factor float64) { // r is the pointer instance of the Rectangle struct. (Method of Rectangle struct with pointer receiver)
+	r.length = r.length * factor
+	r.width = r.width * factor
+}
+
+func (Rectangle) Message1() { // no instance of Rectangle struct is created. (Method of Rectangle struct with value receiver)
+	fmt.Println("This is first message of rectangle shape")
+}
+
+func (*Rectangle) Message2() { // no instance of Rectangle struct is created. (Method of Rectangle struct with pointer receiver)
+	fmt.Println("This is second message rectangle shape")
+}
+
+type myInt int
+
+func (m myInt) CheckValid() bool {
+	return m >= 0
+}
+
+func (m *myInt) IsSingleDigit() bool {
+	return *m >= 0 && *m <= 9
+}
+
+func (myInt) Statement1() {
+	fmt.Println("Its a positive and single digit integer.")
+}
+
+func (*myInt) Statement2() {
+	fmt.Println("Its either a negative number or a multiple digit integer.")
+}
+
+func main() {
+	r := Rectangle{
+		length: 10,
+		width:  9,
+	}
+
+	fmt.Println("Area of rectangle before scaling :", r.Area())
+	r.Scale(2) // value of length and width doubles as it has the pointer receiver
+	fmt.Println("Area of rectangle after scaling :", r.Area())
+	r.Message1()
+	r.Message2()
+
+	s1 := Shape1{
+		r, // we can also write - rect : r
+	}
+	fmt.Println("Area of Shape1 Rectangle :", s1.rect.Area()) // accessed Area() method via rect. Direct access not possible as Rectnagle struct embedded inside Shape1 struct with field-name as rect.
+
+	s2 := Shape2{
+		r, // we can also write - Rectangle : r
+	}
+	fmt.Println("Area of Shape2 Rectangle :", s2.Rectangle.Area()) // accessed Area() method via Rectangle.
+	fmt.Println("Area of shape :", s2.Area())                      // accessed Area() directly as Rectangle struct was embedded inside Shape2 struct without any field-name.
+
+	m := myInt(9)
+	if m.CheckValid() && m.IsSingleDigit() {
+		m.Statement1()
+	} else {
+		m.Statement2()
+	}
+}
+
+// In value receiver, the entire struct is copied to the instance of struct.
+// In pointer receiver, the reference to the original struct is present in the instance of struct.
