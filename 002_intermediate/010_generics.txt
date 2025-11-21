@@ -1,0 +1,97 @@
+package main
+
+import "fmt"
+
+func swap[T any](a, b T) (T, T) { // T is of type any. any is nothing but interface{}. So T can be allotted any datatype.
+	return b, a
+}
+
+type Stack[T any] struct { // here T can by replaced by any datatype which the user wishes to put inplace of T.
+	elements []T
+}
+
+func (s *Stack[T]) push(x T) {
+	s.elements = append(s.elements, x)
+}
+
+func (s *Stack[T]) pop() (T, bool) {
+	var element T
+	if len(s.elements) == 0 {
+		return element, false
+	}
+
+	element = s.elements[len(s.elements)-1]
+	s.elements = s.elements[:len(s.elements)-1]
+	return element, true
+}
+
+func (s *Stack[T]) isEmpty() bool {
+	return len(s.elements) == 0
+}
+
+func (s *Stack[T]) printAll() {
+	if len(s.elements) == 0 {
+		fmt.Println("The stack is empty.")
+		return
+	}
+
+	fmt.Print("The elements are : ")
+	for _, v := range s.elements {
+		fmt.Printf("%v, ", v)
+	}
+	fmt.Println()
+}
+
+type Person[T any] struct { // here multiple datatypes are present in struct including T.
+	name      string
+	age       int
+	extraInfo T
+}
+
+func main() {
+	x, y := 1, 2
+	x, y = swap(x, y) // here T is replaced by int
+	fmt.Println(x, y)
+
+	intStack := Stack[int]{ // here T is replaced by int. Also note that int is mentioned specifically inside square brackets while initialising the struct.
+		elements: make([]int, 0),
+	}
+
+	fmt.Println("Is intStack empty :", intStack.isEmpty())
+	intStack.push(1)
+	intStack.push(2)
+	intStack.push(3)
+	intStack.printAll()
+	intStack.pop()
+	intStack.pop()
+	intStack.printAll()
+	fmt.Println("Is intStack empty :", intStack.isEmpty())
+	intStack.pop()
+	intStack.pop()
+	intStack.printAll()
+	fmt.Println("Is intStack empty :", intStack.isEmpty())
+
+	stringStack := Stack[string]{ // here T is replaced by string
+		elements: []string{},
+	}
+
+	stringStack.push("Rishav")
+	stringStack.push("Ravi")
+	stringStack.printAll()
+	fmt.Println("Is stringStack empty :", stringStack.isEmpty())
+	stringStack.pop()
+	stringStack.push("Shivangi")
+	stringStack.printAll()
+	stringStack.pop()
+	stringStack.pop()
+	fmt.Println("Is stringStack empty :", stringStack.isEmpty())
+
+	person := Person[Stack[float64]]{ // here T is replaced by Stack[float64]
+		name: "Rishav Kumar",
+		age:  26,
+		extraInfo: Stack[float64]{
+			elements: []float64{},
+		},
+	}
+	fmt.Println("person :", person)
+}
