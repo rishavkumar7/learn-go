@@ -10,6 +10,10 @@ type Shape2 struct { // direct access of Rectangle's methods are possible.
 	Rectangle
 }
 
+func (Shape2) Message1() { // created this method to override the Message1() method of Rectangle struct.
+	fmt.Println("This is message of shape2")
+}
+
 type Rectangle struct {
 	length float64
 	width  float64
@@ -79,6 +83,9 @@ func main() {
 	} else {
 		m.Statement2()
 	}
+
+	s2.Rectangle.Message1() // This will specifically call the Message1() method of Rectangle struct.
+	s2.Message1()           // This will call the Message1() method of Shape2 struct as the Message1() method of Rectangle struct is overridden by the Message1() method of Shape2 struct.
 }
 
 // In value receiver, the entire struct is copied to the instance of struct.
