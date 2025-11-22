@@ -1,0 +1,48 @@
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type myError struct { // custom error type
+	code    int
+	message string
+	err     error
+}
+
+func (e *myError) Error() string { // custom error type must include this function. (In order to implement the error interface)
+	return fmt.Sprintf("Error-code : %d\nError-message : %s\nError : %v", e.code, e.message, e.err)
+}
+
+func process1(x int) error { // this function returns the error interface
+	if x < 0 {
+		return errors.New("Value can't be negative.") // creating a new error (using errors package)
+	}
+	return nil
+}
+
+func process2(x int) error { // this function also returns the error interface
+	if x < 0 {
+		return &myError{ // as the myError type implements the error interface therefore this type can be returned inplace of error interface.
+			code:    500,
+			message: "Something went wrong!!",
+			err:     errors.New("Internal server error!!"),
+		}
+	}
+	return nil
+}
+
+func main() {
+	err1 := process1(-5)
+	if err1 != nil {
+		fmt.Println(err1)
+	}
+
+	err2 := process2(-3)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+}
+
+// Custom error types can be created by implementing the error interface of go. Error interface is implemented by creating the custom type's Error() method which returns a string.
