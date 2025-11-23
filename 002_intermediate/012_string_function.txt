@@ -1,0 +1,88 @@
+package main
+
+import (
+	"fmt"
+	"regexp"
+	"strconv"
+	"strings"
+)
+
+func main() {
+	str1 := "Hello Go!"
+	fmt.Println(len(str1)) // length of the string.
+
+	num := 18
+	fmt.Println(strconv.Itoa(num)) // converts the integer to the string.
+	fmt.Println(len(strconv.Itoa(num)))
+
+	str2 := "Apple-Mango-Guava"
+	fmt.Println(strings.Split(str2, "-")) // splits the string using the seperator and returns the slice []string.
+
+	fruits := []string{"Banana", "Kiwi", "Pineapple"}
+	fmt.Println(strings.Join(fruits, ", ")) // joins the slice []string elements with the seperator between them and return the resultant string.
+
+	fmt.Println(strings.Contains(str1, "Go")) // checks if the keyword is present in te string.
+
+	fmt.Println(strings.Replace(str1, "Go", "World", 5)) // replaces the first keyword with the second keyword, count times in the string.
+
+	str3 := "   Hello World!!!!!   "
+	fmt.Println(strings.TrimSpace(str3)) // removes the spaces from beginning and end of the string.
+
+	fmt.Println(strings.ToUpper(str3)) // converts string to uppercase.
+
+	fmt.Println(strings.ToLower(str3)) // converts string to lowercase.
+
+	fmt.Println(strings.Repeat("foo", 4)) // repeats the provided string count times and return the resultant string.
+
+	fmt.Println(strings.Count(str3, "l")) // counts the occurrance of the keyword in the string.
+
+	fmt.Println(strings.HasPrefix(str1, "He")) // checks if the keyword is the prefix of the string.
+
+	fmt.Println(strings.HasSuffix(str1, "o!")) // checks if the keyword is the suffix of the string.
+
+	var builder strings.Builder  // more efficient than string concatenation or '+' because of memory management as it avoids intermediate strings.
+	builder.WriteString("Hello") // appending the string
+	builder.WriteByte('!')       // appending the byte
+	builder.WriteRune('😊')       // appending the rune
+	str4 := builder.String()     // converting the builder to string
+	fmt.Println(builder)
+	fmt.Println(str4)
+
+	builder.Reset() // clearing the builder
+	builder.WriteString("Starting")
+	builder.WriteString(" Fresh")
+	str4 = builder.String() // note that string is immutable (str4[0] = 'R' is not allowed) but variables are mutable.
+	fmt.Println(str4)
+
+	str5 := "hel1lo 123 Go 11 !"
+	pattern := regexp.MustCompile(`\d+`)     // parses the expression and panics if unsuccessfull
+	slice1 := pattern.FindAllString(str5, 4) // finds all the occurrances (maximum count times) of the pattern in the string and returns the slice []string.
+	fmt.Println(slice1)
+}
+
+// [abc] - single character must be either 'a', 'b' or 'c'.
+// [^abc] - single character must be neither 'a', 'b' or 'c'. (if ^ is not in the beginning inside square brackets then it refers to carat literal)
+// [A-Za-z0-9_] - heiphen is used for ranges.
+
+// \d - must be a digit.
+// \D - must not be a digit.
+// \w - must be a single word character among [a-zA-Z0-9_].
+// \W - must not be a single word character.
+// \s - must be a whitespace (spaces, newline, tab, carriage return, etc.).
+// \S - must not be a whitespace.
+// \b - represents a word boundary (whenever we jump from word character to non-word character or vice-versa). ([a-zA-Z0-9_] represent word character and everything else represents non-word character)
+// \B - represents all positions which are not word boundary.
+
+// * - zero or more characters.
+// + - one or more characters.
+// ? - zero or one character.
+// . - any character only once (newline character is not included).
+// {n} - exactly n times.
+// {n,} - atleast n times.
+// {,n} - atmost n times.
+// {m,n} - atleast m times and atmost n times.
+
+// ^ - if its in the beginning but outside square brackets then it means that the string must begin with so and so. (if its in between but outside square brackets the its a carat literal)
+// $ - if its at the end then it means that the string must end with so and so. (if its in the middle then its a dollar literal)
+// | - refers OR
+// () - refers grouping together
