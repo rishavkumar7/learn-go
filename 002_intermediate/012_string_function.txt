@@ -58,11 +58,12 @@ func main() {
 	pattern := regexp.MustCompile(`\d+`)     // parses the expression and panics if unsuccessfull
 	slice1 := pattern.FindAllString(str5, 4) // finds all the occurrances (maximum count times) of the pattern in the string and returns the slice []string.
 	fmt.Println(slice1)
+	fmt.Println("Match :", pattern.MatchString("f")) // returns false if there is no occurance of the pattern in the string else returns true.
 }
 
 // [abc] - single character must be either 'a', 'b' or 'c'.
 // [^abc] - single character must be neither 'a', 'b' or 'c'. (if ^ is not in the beginning inside square brackets then it refers to carat literal)
-// [A-Za-z0-9_] - heiphen is used for ranges.
+// [A-Za-z0-9_] - hiphen is used for ranges. (for using hiphen as a literal inside square brackets use it at the end inside the square brackets)
 
 // \d - must be a digit.
 // \D - must not be a digit.
