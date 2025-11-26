@@ -1,0 +1,45 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	loc, err := time.LoadLocation("Asia/Kolkata") // gives the time zone of provided location
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+
+	fmt.Println(time.Now())                                           // gives current time in UST
+	fmt.Println(time.Now().In(loc))                                   // gives current time in provided time zone
+	fmt.Println(time.Now().Format("02-01-2006 15:04:05 Mon"))         // gives current time in UST after formatting
+	fmt.Println(time.Now().In(loc).Format("02-01-2006 15:04:05 Mon")) // gives current time in provided time zone after formatting
+
+	fmt.Println(time.Date(2025, 11, 25, 4, 25, 25, 0, time.UTC)) // gives custom time in UST
+	fmt.Println(time.Date(2025, 11, 25, 4, 25, 25, 0, loc))      // gives custom time in provided location
+
+	time1, err := time.Parse("02-01-2006 15:04:05 MST", "26-11-2025 16:38:20 IST") // parses and returns the time value it represents
+	fmt.Println(time1)
+
+	fmt.Println(time1.Weekday()) // any specific details can be fetched from the time value (eg. - weekday)
+
+	fmt.Println(time1.Add(time.Hour * 24)) // adds the amount of duration provided
+
+	t1 := time.Date(2025, 11, 25, 4, 25, 25, 0, loc)
+	t2 := time.Date(2025, 11, 25, 10, 18, 37, 0, loc)
+	duration := t2.Sub(t1) // return 5h53m12s as the duration difference
+	fmt.Println(duration)
+
+	fmt.Println("Is t2 after t1 :", t2.After(t1))   // checks if t2 is after t1
+	fmt.Println("Is t2 before t1 :", t2.Before(t1)) // checks if t2 is before t1
+
+	fmt.Println(time1.Round(time.Hour)) // rounds off the time to nearest duration provided (hour in this case)
+
+	fmt.Println(time1.Truncate(time.Hour)) // rounds down to the nearest duration provided (hour in this case)
+
+	unixTime := time.Now().Unix() // returns an integer representing epoch time in seconds
+	fmt.Println(unixTime)
+	time2 := time.Unix(unixTime, 0) // takes epoch time in seconds and nano-seconds precision value and returns time value in UTC.
+	fmt.Println(time2)
+}
