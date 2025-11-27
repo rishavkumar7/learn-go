@@ -1,0 +1,55 @@
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+	str1 := "2147483648"
+	str2 := "456abc"
+	str3 := "1010"
+	str4 := "3.14"
+
+	num1, err := strconv.Atoi(str1) // converts a string to an integer of int64 type
+	if err != nil {
+		fmt.Println("Error :", err)
+		// return
+	}
+	fmt.Println(num1)
+
+	num2, err := strconv.ParseInt(str1, 10, 32) // converts a string(representing an integer of base 10) to an integer of int64 type and it must fit in 32 bits.
+	if err != nil {                             // returns an error if the string is not a valid string or doesn't fit in 32 bits.
+		fmt.Println("Error :", err)
+		// return
+	}
+	fmt.Println(num2)
+
+	num3, err := strconv.ParseInt(str1, 10, 33) // converts a string(representing an integer of base 10) to an integer and it must fit in 33 bits.
+	if err != nil {                             // returns an error if the string is not a valid string or doesn't fit in 33 bits.
+		fmt.Println("Error :", err)
+		// return
+	}
+	fmt.Println(num3)
+
+	num4, err := strconv.ParseInt(str2, 10, 32) // converts a string(representing an integer of base 10) to an integer and it must fit in 32 bits.
+	if err != nil {                             // returns an error if the string is not a valid string or doesn't fit in 32 bits.
+		fmt.Println("Error :", err)
+		// return
+	}
+	fmt.Println(num4)
+
+	num5, err := strconv.ParseInt(str3, 2, 33) // converts a string(representing an integer of base 2) to an integer and it must fit in 33 bits.
+	if err != nil {                            // returns an error if the string is not a valid string or doesn't fit in 33 bits.
+		fmt.Println("Error :", err)
+		// return
+	}
+	fmt.Println(num5)
+
+	num6, err := strconv.ParseFloat(str4, 40) // converts a string to a float64 value.
+	if err != nil {
+		fmt.Println("Error :", err)
+		// return
+	}
+	fmt.Println(num6)
+}
