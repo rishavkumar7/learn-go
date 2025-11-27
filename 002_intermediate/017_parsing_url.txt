@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	"net/url"
+)
+
+func main() {
+	//___________Parsing the url________________________________________________________________________________________________
+	url1 := "https://example1.com:5001/api/search?key1=value1&key2=value2#fragment"
+	parsedUrl1, err := url.Parse(url1) // returns the parsed url
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("Parsed Url :", parsedUrl1)
+
+	fmt.Println("Scheme :", parsedUrl1.Scheme)         // returns the scheme or protocol
+	fmt.Println("Host :", parsedUrl1.Host)             // returns the ip:port
+	fmt.Println("Port :", parsedUrl1.Port())           // returns the port
+	fmt.Println("Path :", parsedUrl1.Path)             // returns the path
+	fmt.Println("Query String :", parsedUrl1.RawQuery) // returns the entire query string
+	fmt.Println("Query Map :", parsedUrl1.Query())     // returns the query as map of key value pairs
+	fmt.Println("Fragment :", parsedUrl1.Fragment)     // returns the fragment
+
+	queryMap := parsedUrl1.Query()
+	fmt.Println("key1 :", queryMap.Get("key1")) // gets the value of a particular key in the query.
+	fmt.Println("key2 :", queryMap.Get("key2"))
+
+	//___________Creating the url_______________________________________________________________________________________________
+	values := url.Values{}                // creating the query map.
+	values.Add("username", "rishavkumar") // adding the key-value pair to the map
+	values.Add("password", "123")
+	queryString := values.Encode() // encodes the value in the url-encoded form.
+
+	url2 := &url.URL{ // creating the url
+		Scheme:   "http",
+		Host:     "example.com",
+		Path:     "/api/login",
+		RawQuery: queryString,
+	}
+	fmt.Println(url2)
+}
