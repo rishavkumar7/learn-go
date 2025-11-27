@@ -1,0 +1,20 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+func main() {
+	fmt.Println(rand.Intn(101))   // generates random integer number in the interval [0, 101).
+	fmt.Println(rand.Intn(6) + 5) // generates random integer number in the interval [5, 11).
+
+	val1 := rand.New(rand.NewSource(42)) // custom seeding with constant value.
+	fmt.Println(val1.Intn(101))          // will always produce the same value in the interval [5, 11) as its seeded with the same value.
+
+	val2 := rand.New(rand.NewSource(time.Now().Unix())) // custom seeding with different value as time varies continuously.
+	fmt.Println(val2.Intn(6) + 5)                       // will produce different value in the interval [5, 11) as its seeded with different value.
+
+	fmt.Println(rand.Float64()) // generates random decimal number in the interval [0.0, 1.0).
+}
