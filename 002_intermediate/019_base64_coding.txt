@@ -1,0 +1,30 @@
+package main
+
+import (
+	"encoding/base64"
+	"fmt"
+)
+
+func main() {
+	message1 := "He~lo, World!"
+
+	encodedMessage1 := base64.StdEncoding.EncodeToString([]byte(message1)) // standard encoding. Uses A-Z, a-z, 0-9, +, / characters while encoding.
+	fmt.Println("encodedMessage1 :", encodedMessage1)
+
+	decodedMessage1, err := base64.StdEncoding.DecodeString(encodedMessage1) // standard decoding
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("decodedMessage1 :", string(decodedMessage1))
+
+	encodedMessage2 := base64.URLEncoding.EncodeToString([]byte(message1)) // url-safe encoding. Avoids + and / characters while encoding.
+	fmt.Println("encodedMessage2 :", encodedMessage2)
+
+	decodedMessage2, err := base64.URLEncoding.DecodeString(encodedMessage2) // url-safe decoding
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("decodedMessage2 :", string(decodedMessage2))
+}
