@@ -1,0 +1,53 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+func main() {
+	message1 := "Hello, Bufio Package!\nThis is the second line.\nThis is the third line.\n"
+	reader := bufio.NewReader(strings.NewReader(message1)) // reading from source string and creating a buffered reader
+
+	readMessage1 := make([]byte, 15)
+	n1, err := reader.Read(readMessage1) // parameter must be passed as a []byte slice. Returns number of bytes read.
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+	fmt.Printf("Read %d bytes, readMessage1 : %s\n", n1, string(readMessage1[:n1])) // readMessage1 contains only 15 bytes of the string.
+
+	readMessage2, err := reader.ReadString('\n') // reads until the first occurrence of delimiter '\n' . Note that the remaining part of the string was only considered for reading (which is from 16th byte to the end).
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+	fmt.Println("readMessage2 :", readMessage2)
+
+	writer := bufio.NewWriter(os.Stdout) // creating a buffered writer which writes to standard output (console)
+
+	message2 := "Hello, Bufio Writer!\nThis is the second line from writer.\n"
+	n2, err := writer.Write([]byte(message2)) // parameter must be passed as a []byte slice. Returns number of bytes written.
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+	fmt.Printf("Wrote %d bytes.\n", n2)
+	err = writer.Flush() // Always remember to flush the writer buffer to ensure all data is written to the underlying writer.
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+
+	message3 := "Hello, Bufio Writer String!\nThis is the second line from Writer String.\n"
+	n3, err := writer.WriteString(message3) // parameter is passed as a string. Returns number of bytes written.
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+	fmt.Printf("Wrote %d bytes.\n", n3)
+	err = writer.Flush() // Remember to flush again after writing.
+	if err != nil {
+		fmt.Println("Error :", err)
+	}
+}
+
+// bufio is a wrapper to add more features.
+// It provides buffered I/O which can improve efficiency.
