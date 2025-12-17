@@ -1,0 +1,39 @@
+package main
+
+import (
+	"crypto/rand"
+	"crypto/sha256"
+	"crypto/sha512"
+	"fmt"
+	"io"
+)
+
+func main() {
+	password := "my_secure_password"
+
+	hash256 := sha256.Sum256([]byte(password)) // hashing using sha256 which returns [32]byte
+	fmt.Println(hash256)
+	fmt.Printf("%x\n", hash256) // hexadecimal format of hash
+
+	hash512 := sha512.Sum512([]byte(password)) // hashing using sha512 which returns [64]byte
+	fmt.Println(hash512)
+	fmt.Printf("%x\n", hash512) // hexadecimal format of hash
+
+	salt, err := generateSalt()
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	hash256WithSalt := sha256.Sum256(append([]byte(password), salt...)) // hashing password with salt using sha256
+	fmt.Printf("%x\n", salt)
+	fmt.Printf("%x\n", hash256WithSalt)
+}
+
+func generateSalt() ([]byte, error) {
+	salt := make([]byte, 16)
+	_, err := io.ReadFull(rand.Reader, salt) // assigns crypto secure random bytes of length=16 bytes to salt slice variable.
+	if err != nil {
+		return nil, err
+	}
+	return salt, err
+}
