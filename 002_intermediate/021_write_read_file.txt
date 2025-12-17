@@ -1,0 +1,77 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
+func main() {
+	file, err := os.Create("file1.txt") // creates a new file of desired name
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	defer func() {
+		fmt.Println("Closing the file")
+		file.Close() // closes the file after the operations are done
+	}()
+	fmt.Println("File created successfully !!")
+
+	message1 := "Hey, Rishav here!\n\n\n"
+	_, err = file.Write([]byte(message1)) // writes bytes to the file
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("File written successfully using bytes")
+
+	message2 := "This is another line written using string.\n\n\n"
+	_, err = file.WriteString(message2) // writes string to the file
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("File written successfully using string")
+
+	file, err = os.Open("file1.txt") // opens an existing file
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	defer func() {
+		fmt.Println("Closing the opened file")
+		file.Close() // closes the file after the operations are done
+	}()
+	fmt.Println("File opened successfully !!")
+
+	data := make([]byte, 100) // creates a byte slice of 100 bytes length
+	_, err = file.Read(data)  // reads the content of the file into the byte slice. Maximum 100 bytes will be read here.
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println(string(data))
+
+	file, err = os.Open("file1.txt") // opens an existing file
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	defer func() {
+		fmt.Println("Closing the opened file for scanning")
+		file.Close() // closes the file after the operations are done
+	}()
+	fmt.Println("File opened successfully for scanning !!")
+
+	scanner := bufio.NewScanner(file) // creates a new scanner to read the file line by line
+	for scanner.Scan() {              // scans the file line by line. It returns false only when the end of file is reached or an error occurs.
+		line := scanner.Text() // gets the text of the current line
+		fmt.Println("Line :", line)
+	}
+	err = scanner.Err() // checks if the end of file was reached or an error occurred during scanning previously
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+}
