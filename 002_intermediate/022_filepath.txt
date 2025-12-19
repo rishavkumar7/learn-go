@@ -1,0 +1,53 @@
+package main
+
+import (
+	"fmt"
+	"path/filepath"
+)
+
+func main() {
+	joinedPath := filepath.Join("dir1", "dir2", "dir3", "file.txt") // joins all the path and returns "dir1/dir2/dir3/file.txt"
+	fmt.Println("Joined Path :", joinedPath)
+
+	normalizedPath := filepath.Clean("dir1/dir2/../dir3/./file.txt") // cleans to shortest path and returns "dir1/dir3/file.txt"
+	fmt.Println("Normalized Path :", normalizedPath)
+
+	dir, file := filepath.Split(joinedPath) // seperates directory path and file. Returns "dir1/dir2/dir3/" and "file.txt"
+	fmt.Printf("Directory : %s, File : %s\n", dir, file)
+
+	base1 := filepath.Base("dir1/dir2")          // returns the last element of the path. Returns "dir2"
+	base2 := filepath.Base("dir1/dir2/file.txt") // returns "file.txt"
+	base3 := filepath.Base("")                   // returns "." since the path is empty
+	base4 := filepath.Base(".")                  // returns "." since the path is current directory
+	base5 := filepath.Base("/")                  // returns "/" since it's the root directory
+	fmt.Println("base1 :", base1)
+	fmt.Println("base2 :", base2)
+	fmt.Println("base3 :", base3)
+	fmt.Println("base4 :", base4)
+	fmt.Println("base5 :", base5)
+
+	relativePath := "./dir1/dir2/file.txt"
+	absolutePath := "/dir1/dir2/file.txt"
+	fmt.Println(filepath.IsAbs(relativePath)) // returns false
+	fmt.Println(filepath.IsAbs(absolutePath)) // returns true
+
+	rel1, err := filepath.Rel("dir1/dir2", "dir1/dir2/dir3/file.txt") // gives the relative path of given path(2nd argument) w.r.t. current directory(1st argument) returns "dir3/file.txt"
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	rel2, err := filepath.Rel("dir1/dir2", "dir3/dir2/dir4/file.txt") // returns "../../dir3/dir2/dir4/file.txt"
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("rel1 :", rel1)
+	fmt.Println("rel2 :", rel2)
+
+	abs, err := filepath.Abs(relativePath) // gives the absolute path for relative path and returns "/home/rishavkumar/projects/learn-go/dir1/dir2/file.txt"
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("abs :", abs)
+}
