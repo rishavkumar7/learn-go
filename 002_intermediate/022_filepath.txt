@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 )
 
@@ -50,4 +51,17 @@ func main() {
 		return
 	}
 	fmt.Println("abs :", abs)
+
+	err = filepath.WalkDir("./002_intermediate", func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			fmt.Println("Error :", err)
+			return err
+		}
+		fmt.Println("Path :", path)
+		return nil
+	})
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
 }

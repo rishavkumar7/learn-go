@@ -1,0 +1,47 @@
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func checkError(err error) {
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+}
+
+func main() {
+	checkError(os.Mkdir("subdir1", 0755)) // creates a directory named "subdir1" and sets its permission to 0755.
+
+	checkError(os.MkdirAll("subdir2/parent/child1", 0755)) // creates nested directories "subdir2/parent/child1" and sets their permission to 0755.
+
+	checkError(os.MkdirAll("subdir2/parent/child2", 0755)) // creates nested directories "subdir2/parent/child2" and sets their permission to 0755.
+
+	checkError(os.WriteFile("subdir2/parent/file", []byte("This file is in the path 'subdir2/parent/'"), 0755)) // creates a file or writes in the existing file in the specified path and sets its permission to 0755. Throws error if the path doesn't exist.
+
+	result1, err := os.ReadDir("subdir2/parent") // reads the contents of the specified directory.
+	checkError(err)
+	for _, entry := range result1 {
+		fmt.Println(entry.Name(), entry.IsDir(), entry.Type())
+	}
+
+	currentDirectory1, err := os.Getwd() // gets the current working directory.
+	checkError(err)
+	fmt.Println("Current directory :", currentDirectory1)
+
+	checkError(os.Chdir("subdir2/parent")) // changes the current working directory to the specified path.
+
+	currentDirectory2, err := os.Getwd() // gets the current working directory. It should reflect the change made by os.Chdir().
+	checkError(err)
+	fmt.Println("Current directory :", currentDirectory2)
+
+	checkError(os.Chdir("../..")) // changes the current working directory back to the original directory.
+
+	currentDirectory3, err := os.Getwd() // gets the current working directory. It should reflect the change made by os.Chdir().
+	checkError(err)
+	fmt.Println("Current directory :", currentDirectory3)
+
+	checkError(os.RemoveAll("subdir2/parent")) // removes the specified directory along with any children it contains.
+}
