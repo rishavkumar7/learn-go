@@ -1,0 +1,27 @@
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	tempFile, err := os.CreateTemp("", "temporaryGoCourseFile") // Create a temporary file in the provided directory ("" means default temp directory).
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	defer os.Remove(tempFile.Name()) // Clean up the file afterwards.
+	defer tempFile.Close()           // Close the file when done before removing it.
+	fmt.Println("Temporary file created :", tempFile.Name())
+
+	tempDir, err := os.MkdirTemp("", "temporaryGoCourseDirectory") // Create a temporary directory in the provided directory ("" means default temp directory).
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	defer os.RemoveAll(tempDir) // Clean up the directory afterwards.
+	fmt.Println("Temporary directory created :", tempDir)
+}
+
+// os.CreateTemp() is different from os.WriteFile() because CreateTemp() creates a new temporary file with a provided pattern name, while WriteFile() writes data to a specified file path, creating the file if it does not exist or overwriting it if it does.
