@@ -52,7 +52,7 @@ func main() {
 	}
 	fmt.Println("abs :", abs)
 
-	err = filepath.WalkDir("./002_intermediate", func(path string, d os.DirEntry, err error) error {
+	err = filepath.WalkDir("./002_intermediate", func(path string, d os.DirEntry, err error) error { // filepath.WalkDir() will run the anonymous function in each and every file or directory inside the provided root directory "path"
 		if err != nil {
 			fmt.Println("Error :", err)
 			return err
