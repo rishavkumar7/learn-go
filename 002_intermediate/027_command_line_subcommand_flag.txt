@@ -1,0 +1,49 @@
+package main
+
+import (
+	"flag"
+	"os"
+)
+
+// Note that if you run this code without providing any subcommand, it will print an error message and exit.
+
+func main() {
+	subcommand1 := flag.NewFlagSet("firstSub", flag.ExitOnError)                                         // creates a new flag set for the first subcommand
+	flag11 := subcommand1.String("processing", "medium", "Set the processing level (low, medium, high)") // creates a string flag for first subcommand
+	flag12 := subcommand1.Int("byte", 1024, "Set the byte size")                                         // creates an int flag for first subcommand
+
+	subcommand2 := flag.NewFlagSet("secondSub", flag.ExitOnError)                           // creates a new flag set for the second subcommand
+	flag21 := subcommand2.Bool("store", false, "Tells the machine whether to cache or not") // creates a bool flag for second subcommand
+
+	if len(os.Args) < 2 { // checking if at least one subcommand is provided or not
+		println("expected 'firstSub' or 'secondSub' subcommand")
+		os.Exit(1)
+	}
+
+	switch os.Args[1] { // checking which subcommand is invoked
+	case "firstSub": // if the first subcommand is invoked
+		subcommand1.Parse(os.Args[2:]) // parsing the flags for the first subcommand
+		println("First Subcommand:")
+		println("Processing Level:", *flag11)
+		println("Byte Size:", *flag12)
+	case "secondSub": // if the second subcommand is invoked
+		subcommand2.Parse(os.Args[2:]) // parsing the flags for the second subcommand
+		println("second Subcommand:")
+		println("Store :", *flag21)
+	default: // if no valid subcommand is provided
+		println("expected 'firstSub' or 'secondSub' subcommand")
+		os.Exit(1)
+	}
+}
+
+// "go run 002_intermediate/command_line_subcommand_flag.go firstSub --help" lists all the flags for the first subcommand
+// "go run 002_intermediate/command_line_subcommand_flag.go secondSub --help" lists all the flags for the second subcommand
+
+// Output for the first subcommand with example : "go run 002_intermediate/command_line_subcommand_flag.go firstSub -processing slow -byte 10"
+// First Subcommand:
+// Processing Level: slow
+// Byte Size: 10
+
+// Output for the first subcommand with example : "go run 002_intermediate/command_line_subcommand_flag.go secondSub -store true"
+// second Subcommand:
+// Store : true
