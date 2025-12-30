@@ -1,0 +1,42 @@
+package main
+
+import (
+	"flag"
+	"fmt"
+	"os"
+)
+
+func main() {
+	for i, arg := range os.Args { // os.Args is []string that holds command line arguments
+		fmt.Printf("Argument %d : %s\n", i, arg)
+	}
+
+	var name string
+	var age int
+	var male bool
+
+	flag.StringVar(&name, "name", "John", "Name of the user") // stores the value of -name flag in name variable
+	flag.IntVar(&age, "age", 30, "Age of the user")           // stores the value of -age flag in age variable
+	flag.BoolVar(&male, "male", true, "Is user a male")       // stores the value of -male flag in male variable
+
+	flag.Parse() // parses the command line flags
+
+	fmt.Println("Name :", name)
+	fmt.Println("Age :", age)
+	fmt.Println("Male :", male)
+}
+
+// The output for the command is shown below : "go run 002_intermediate/command_line_argument_flag.go -name "Rishav Kumar" -age 26 -male true"
+
+// Argument 0 : /tmp/go-build234329411/b001/exe/command_line_argument_flag
+// Argument 1 : -name
+// Argument 2 : Rishav Kumar
+// Argument 3 : -age
+// Argument 4 : 26
+// Argument 5 : -male
+// Argument 6 : true
+// Name : Rishav Kumar
+// Age : 26
+// Male : true
+
+// Note that if we pass multiple word string as argument, we need to enclose it in double quotes to consider it as a single argument.
