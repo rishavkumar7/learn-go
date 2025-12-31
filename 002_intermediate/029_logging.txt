@@ -1,0 +1,44 @@
+package main
+
+import (
+	"log"
+	"os"
+)
+
+func main() {
+	log.Println("This is log message") // This is a log message
+
+	log.SetPrefix("LOG-INFO : ") // Setting custom prefix
+	log.Println("This is log message with custom prefix")
+
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile) // Setting custom flags for log format
+	log.Println("This is log message with custom prefix and custom flags")
+
+	infoLogger.Println("This is an info message")   // logging info message to console
+	warnLogger.Println("This is a warning message") // logging warning message to console
+	errorLogger.Println("This is an error message") // logging error message to console
+
+	//________________________Logging to a file_________________________________________
+
+	file, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666) // opening/creating log file with write only and append mode
+	if err != nil {
+		log.Fatalf("Error : %v", err)
+	}
+	defer file.Close() // Ensuring the file is closed after usage
+
+	infoLogger1 := log.New(file, "INFO : ", log.Ldate|log.Ltime|log.Llongfile)   // Custom info logger for file
+	warnLogger1 := log.New(file, "WARN : ", log.Ldate|log.Ltime|log.Lshortfile)  // Custom warning logger for file
+	errorLogger1 := log.New(file, "ERROR : ", log.Ldate|log.Ltime|log.Llongfile) // Custom error logger for file
+
+	infoLogger1.Println("This is an info message written to file")   // Logging info message to file
+	warnLogger1.Println("This is a warning message written to file") // Logging warning message to file
+	errorLogger1.Println("This is an error message written to file") // Logging error message to file
+}
+
+var (
+	infoLogger  = log.New(os.Stdout, "INFO : ", log.Ldate|log.Ltime|log.Llongfile)  // Custom info logger for console
+	warnLogger  = log.New(os.Stdout, "WARN : ", log.Ldate|log.Ltime|log.Lshortfile) // Custom warning logger for console
+	errorLogger = log.New(os.Stdout, "ERROR : ", log.Ldate|log.Ltime|log.Llongfile) // Custom error logger for console
+)
+
+// Note that a file named "learn-go/app.log" will be created where the log messages will be written.
