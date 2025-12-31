@@ -1,0 +1,34 @@
+package main
+
+import (
+	"github.com/sirupsen/logrus"
+)
+
+func main() {
+	logger := logrus.New() // create a new logger instance
+
+	logger.SetLevel(logrus.WarnLevel) // set log level to WarnLevel. All logs below warn level will be ignored.
+
+	logger.SetFormatter(&logrus.JSONFormatter{}) // set log format to JSON
+
+	logger.Info("This is an info message")   // this will be ignored due to log level set to WarnLevel
+	logger.Warn("This is a warning message") // this will be logged
+	logger.Error("This is an error message") // this will be logged
+	logger.WithFields(logrus.Fields{         // adding extra fields to the log entry. This will also be ignored due to log level set to WarnLevel
+		"user": "Rishav Kumar",
+		"role": "admin",
+	}).Info("This is an info message with extra fields")
+}
+
+// If the level is set to WarnLevel, only the warning and error messages will be logged. The info messages will be ignored.
+// Output will be in JSON format as shown below :
+
+// {"level":"warning","msg":"This is a warning message","time":"2025-12-31T08:22:24Z"}
+// {"level":"error","msg":"This is an error message","time":"2025-12-31T08:22:24Z"}
+
+// If the level is set to InfoLevel, all messages will be logged. The output will be in JSON format as shown below :
+
+// {"level":"info","msg":"This is an info message","time":"2025-12-31T08:21:49Z"}
+// {"level":"warning","msg":"This is a warning message","time":"2025-12-31T08:21:49Z"}
+// {"level":"error","msg":"This is an error message","time":"2025-12-31T08:21:49Z"}
+// {"level":"info","msg":"This is an info message with extra fields","role":"admin","time":"2025-12-31T08:21:49Z","user":"Rishav Kumar"}
