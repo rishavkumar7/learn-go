@@ -1,0 +1,54 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type Student struct {
+	FirstName  string `json:"first_name" db:"firstname" xml:"first"` // uses "first_name" for json, "firstname" for db, "first" for xml.
+	MiddleName string `json:"-"`                                     // "-" signifies to ignore this field in json irrespective of whether MiddleName stores zero value or not.
+	LastName   string `json:"last_name,omitempty"`                   // "omitempty" signifies to ignore this field only when LastName stores zero value (here zero value is "").
+	Age        int    `json:"age,omitempty"`                         // "omitempty" signifies to ignore this field only when Age stores zero value (here zero value is 0).
+	Gender     string `json:"gender"`                                // doesn't ignore this field even when Gender stores zero value.
+}
+
+func main() {
+	student1 := Student{
+		FirstName: "Rishav",
+		LastName:  "Kumar",
+		Age:       26,
+		Gender:    "male",
+	}
+	jsonData1, err := json.Marshal(student1) // converts struct to json
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("Student1 :", string(jsonData1)) // prints output as {"first_name":"Rishav","last_name":"Kumar","age":26,"gender":"male"}
+
+	student2 := Student{ // note that even though Gender field is not present in this struct instance, gender field will appear in the json format storing the zero value of Gender field.
+		FirstName:  "Saurav",
+		MiddleName: "Kumar", // this field will not be visible in json format due to "-"
+		LastName:   "Singh",
+		Age:        0, // this field will not be visible in json format due to "omitempty" as it contains zero value of Age.
+	}
+	jsonData2, err := json.Marshal(student2) // converts struct to json
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("Student2 :", string(jsonData2)) // prints output as {"first_name":"Saurav","last_name":"Singh","gender":""}
+
+	student3 := Student{
+		FirstName: "Ashish",
+		LastName:  "", // this field will not be visible in json format due to "omitempty" as it contains zero value of LastName.
+		Gender:    "male",
+	}
+	jsonData3, err := json.Marshal(student3) // converts struct to json
+	if err != nil {
+		fmt.Println("Error :", err)
+		return
+	}
+	fmt.Println("Student3 :", string(jsonData3)) // prints output as {"first_name":"Ashish","gender":"male"}
+}
