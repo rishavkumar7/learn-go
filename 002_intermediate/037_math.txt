@@ -1,0 +1,58 @@
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	// _______________Constants in math package______________________________
+
+	fmt.Println("Pi :", math.Pi)           // π constant
+	fmt.Println("E :", math.E)             // e constant
+	fmt.Println("Phi :", math.Phi)         // golden ratio constant
+	fmt.Println("Sqrt2 :", math.Sqrt2)     // square root of 2
+	fmt.Println("SqrtPi :", math.SqrtPi)   // square root of π
+	fmt.Println("SqrtE :", math.SqrtE)     // square root of e
+	fmt.Println("sqrtPhi :", math.SqrtPhi) // square root of golden ratio
+	fmt.Println("Ln2 :", math.Ln2)         // natural logarithm of 2
+	fmt.Println("Ln10 :", math.Ln10)       // natural logarithm of 10
+	fmt.Println("Log2E :", math.Log2E)     // base-2 logarithm of e
+	fmt.Println("Log10E :", math.Log10E)   // base-10 logarithm of e
+
+	// _______________Special Values_________________________________________
+
+	fmt.Println(math.Inf(1))  // positive infinity = +Inf
+	fmt.Println(math.Inf(-1)) // negative infinity = -Inf
+	fmt.Println(math.NaN())   // not-a-number = NaN
+
+	// _______________Functions in math package______________________________
+
+	fmt.Println(math.Abs(-7.5))   // absolute value
+	fmt.Println(math.Sqrt(64))    // square root
+	fmt.Println(math.Pow(3, 4))   // power function
+	fmt.Println(math.Exp(2))      // exponential function
+	fmt.Println(math.Ceil(3.14))  // ceiling function
+	fmt.Println(math.Floor(3.84)) // floor function
+	fmt.Println(math.Log(math.E)) // natural logarithm
+	fmt.Println(math.Log10(1000)) // base-10 logarithm
+
+	// ______________Trigonometric Functions_________________________________
+
+	fmt.Println(math.Sin(math.Pi / 2)) // sine function
+	fmt.Println(math.Cos(math.Pi))     // cosine function
+	fmt.Println(math.Tan(math.Pi / 4)) // tangent function
+
+	// _______________Inverse Trigonometric Functions________________________
+
+	fmt.Println(math.Asin(1))     // inverse sine
+	fmt.Println(math.Acos(0))     // inverse cosine
+	fmt.Println(math.Atan(1))     // inverse tangent
+	fmt.Println(math.Atan2(1, 1)) // inverse tangent of y/x
+
+	// _______________Hyperbolic Functions___________________________________
+
+	fmt.Println(math.Sinh(1)) // hyperbolic sine
+	fmt.Println(math.Cosh(1)) // hyperbolic cosine
+	fmt.Println(math.Tanh(1)) // hyperbolic tangent
+}
