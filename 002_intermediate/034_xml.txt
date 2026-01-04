@@ -1,0 +1,130 @@
+package main
+
+import (
+	"encoding/xml"
+	"fmt"
+	"log"
+)
+
+type Person struct {
+	XMLName xml.Name `xml:"person"` // this field gives the name of the field as "person" in the xml data.
+	Name    string   `xml:"name"`
+	Age     int      `xml:"age,omitempty"`    // omitempty tells us that this field will be ignored in the xml data if it contains the zero value of int (zero value of int is 0).
+	Gender  string   `xml:"gender,omitempty"` // omitempty tells us that this field will be ignored in the xml data if it contains the zero value of string (zero value of string is "").
+	Address Address  `xml:"address"`          // the Address field can use the xml.Name as address
+}
+
+type Address struct { // We don't needed xml.Name in this struct as its embedded inside other struct and we aren't declaring it independently.
+	City  string `xml:"city"`
+	State string `xml:"-"` // "-" tells us that this field will always be ignored irrespective of whether it contains the zero value or not.
+}
+
+type Book struct {
+	XMLName xml.Name `xml:"book"`        // this field gives the name of the field as "book" in the xml data.
+	Title   string   `xml:"title"`       // this field will be presented as a child element of book element.
+	Author  string   `xml:"author,attr"` // this field will be presented as an attribute of book element.
+	Isbn    string   `xml:"isbn,attr"`   // this field will be presented as an attribute of book element.
+	Pseudo  Pseudo   `xml:"pseudo"`      // in order to represent a child element with attributes, we need to create a seperate struct for it.
+}
+
+type Pseudo struct { // no xml.Name is needed here as it is embedded inside Book struct.
+	PseudoAttribute string `xml:"pseudoattribute,attr"` // this field will be presented as an attribute of pseudo element.
+	PseudoChild     string `xml:"pseudochild"`          // this field will be presented as a child element of pseudo element.
+}
+
+func main() {
+	person1 := Person{
+		Name:   "Rishav Kumar",
+		Age:    26,
+		Gender: "male",
+		Address: Address{
+			City:  "Jamshedpur",
+			State: "Jharkhand", // even though this field has non-zero value, it will not be present in the final xml data.
+		},
+	}
+	xmlData1, err := xml.Marshal(person1) // converts struct into xml data.
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(string(xmlData1)) // prints the output as <person><name>Rishav Kumar</name><age>26</age><gender>male</gender><address><city>Jamshedpur</city></address></person>
+
+	person2 := Person{ // the fields "Age" and "Gender" will be omitted in the final xml data as they are empty.
+		Name: "Saurav Kumar",
+		Address: Address{
+			City:  "Jamshedpur",
+			State: "Jharkhand", // even though this field has non-zero value, it will not be present in the final xml data.
+		},
+	}
+	xmlData2, err := xml.Marshal(person2) // converts struct into xml data.
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(string(xmlData2)) // prints the output as <person><name>Saurav Kumar</name><address><city>Jamshedpur</city></address></person>
+
+	person3 := Person{ // the fields "Age" and "Gender" will be omitted in the final xml data as they contain respective zero values.
+		Name:   "Ashish",
+		Age:    0,
+		Gender: "",
+		Address: Address{
+			City:  "",
+			State: "",
+		},
+	}
+	xmlData3, err := xml.Marshal(person3) // converts struct into xml data.
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(string(xmlData3)) // prints the output as <person><name>Ashish</name><address><city></city></address></person>
+
+	xmlData4, err := xml.MarshalIndent(person1, "", "\t") // converts struct into xml data in indented format.
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(string(xmlData4)) // The output for xmlData4 is shown below the main() function.
+
+	xmlData5 := `<person><name>"Rishav Kumar"</name><age>26</age><address><city>"Jamshedpur"</city><state>"Jharkhand"</state></address></person>`
+	var person4 Person
+	err = xml.Unmarshal([]byte(xmlData5), &person4) // converts the xml data into struct
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(person4)                                    // prints the output as {{ person} "Rishav Kumar" 26  {"Jamshedpur" }}
+	fmt.Println(person4.Address.City)                       // prints the output as "Jamshedpur"
+	fmt.Println("Local String :", person4.XMLName.Local)    // prints the output as person
+	fmt.Printf("Namespace : '%s'\n", person4.XMLName.Space) // prints the output as '' as the namespace it belongs to is not defined.
+
+	book := Book{
+		Title:  "Learn Go",     // this field will be presented as a child element of book element.
+		Author: "Rishav Kumar", // this field will be presented as an attribute of book element.
+		Isbn:   "123-456-789",  // this field will be presented as an attribute of book element.
+		Pseudo: Pseudo{ // this field is a nested struct.
+			PseudoAttribute: "This is a pseudo attribute", // this field will be presented as an attribute of pseudo element.
+			PseudoChild:     "This is a pseudo child",     // this field will be presented as a child element of pseudo element.
+		},
+	}
+	xmlData6, err := xml.MarshalIndent(book, "", "\t") // converts struct into xml data in indented format.
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(string(xmlData6)) // The output for xmlData4 is shown below the main() function.
+}
+
+// The output for xmlData4 is shown below :
+
+// <person>
+//         <name>Rishav Kumar</name>
+//         <age>26</age>
+//         <gender>male</gender>
+//         <address>
+//                 <city>Jamshedpur</city>
+//         </address>
+// </person>
+
+// The output for xmlData6 is shown below :
+
+// <book author="Rishav Kumar" isbn="123-456-789">
+//         <title>Learn Go</title>
+//         <pseudo pseudoattribute="This is a pseudo attribute">
+//                 <pseudochild>This is a pseudo child</pseudochild>
+//         </pseudo>
+// </book>
