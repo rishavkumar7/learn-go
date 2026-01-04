@@ -1,0 +1,68 @@
+package main
+
+import "fmt"
+
+func main() {
+	var a int = 42
+	var b int32 = int32(a)
+	var c int16 = int16(a)
+	var d int8 = int8(a)
+	var e float64 = float64(a)
+	var f float32 = float32(a)
+	fmt.Println(a, b, c, d, e, f) // prints the output as 42 42 42 42 42 42
+
+	var g int32 = 52
+	var h int = int(g)
+	var i int16 = int16(g)
+	var j int8 = int8(g)
+	var k float64 = float64(g)
+	var l float32 = float32(g)
+	fmt.Println(g, h, i, j, k, l) // prints the output as 52 52 52 52 52 52
+
+	var m int16 = 62
+	var n int = int(m)
+	var o int32 = int32(m)
+	var p int8 = int8(m)
+	var q float64 = float64(m)
+	var r float32 = float32(m)
+	fmt.Println(m, n, o, p, q, r) // prints the output as 62 62 62 62 62 62
+
+	var s int8 = 72
+	var t int = int(s)
+	var u int32 = int32(s)
+	var v int16 = int16(s)
+	var w float64 = float64(s)
+	var x float32 = float32(s)
+	fmt.Println(s, t, u, v, w, x) // prints the output as 72 72 72 72 72 72
+
+	var y float64 = 82.5
+	var z int = int(y)
+	var a1 int32 = int32(y)
+	var b1 int16 = int16(y)
+	var c1 int8 = int8(y)
+	var d1 float32 = float32(y)
+	fmt.Println(y, z, a1, b1, c1, d1) // prints the output as 82.5 82 82 82 82 82.5
+
+	var e1 float32 = 92.5
+	var f1 int = int(e1)
+	var g1 int32 = int32(e1)
+	var h1 int16 = int16(e1)
+	var i1 int8 = int8(e1)
+	var j1 float64 = float64(e1)
+	fmt.Println(e1, f1, g1, h1, i1, j1) // prints the output as 92.5 92 92 92 92 92.5
+
+	var k1 string = "apple😊"
+	var l1 []rune = []rune(k1)
+	var m1 []byte = []byte(k1)
+	fmt.Println(k1, l1, m1) // prints the output as apple😊 [97 112 112 108 101 128522] [97 112 112 108 101 240 159 152 138]
+
+	var n1 []rune = []rune{'b', 'a', 'n', 'a', 'n', 'a', '😊'}
+	var o1 string = string(n1)
+	var p1 []byte = []byte(o1)
+	fmt.Println(n1, o1, p1) // prints the output as [98 97 110 97 110 97 128522] banana😊 [98 97 110 97 110 97 240 159 152 138]
+
+	var q1 []byte = []byte{'c', 'h', 'e', 'r', 'r', 'y'}
+	var r1 string = string(q1)
+	var s1 []rune = []rune(r1)
+	fmt.Println(q1, r1, s1) // prints the output as [99 104 101 114 114 121] cherry [99 104 101 114 114 121]
+}
