@@ -1,0 +1,113 @@
+package main
+
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"strings"
+)
+
+type myResource struct { // this struct implements io.Closer interface as it has a Close method
+	name string
+}
+
+func (r *myResource) Close() error { // Close method implementation for myResource
+	fmt.Println("Closing resource :", r.name)
+	return nil
+}
+
+func readFromReader(r io.Reader) { // this function accepts any io.Reader
+	buf := make([]byte, 1024) // create a buffer to hold the read data
+	n, err := r.Read(buf)     // read data into the buffer. Note that buf is a slice (so when we pass buf, we are passing by value a pointer to the underlying array)
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(string(buf[:n])) // only prints the bytes that were read in string format.
+}
+
+func writeToWriter(w io.Writer, data string) { // this function accepts any io.Writer and passes data to it.
+	_, err := w.Write([]byte(data)) // write data to the writer
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+}
+
+func closeResource(c io.Closer) { // this function accepts any io.Closer resource and closes that resource.
+	err := c.Close() // close the resource
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+}
+
+func bufferExample() { // demonstrates the use of bytes.Buffer
+	var buf bytes.Buffer            // create a buffer instance (note that this is not a pointer and it is allocates stack memory)
+	buf.WriteString("Hello Buffer") // write string to the buffer
+	fmt.Println(buf.String())       // prints the buffer content as string.
+}
+
+func multiReaderExample() { // demonstrates the use of io.MultiReader
+	r1 := strings.NewReader("Hello ")      // creates the first reader
+	r2 := strings.NewReader("MultiReader") // creates the second reader
+	mr := io.MultiReader(r1, r2)           // combines both readers into a single reader
+	buf := new(bytes.Buffer)               // create a buffer instance (note that new returns a pointer and it allocates heap memory)
+	_, err := buf.ReadFrom(mr)             // read from the multi-reader into the buffer
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	fmt.Println(buf.String()) // prints the buffer content as string.
+}
+
+func pipeExample() { // demonstrates the use of io.Pipe
+	pr, pw := io.Pipe() // creates a pipe with a reader and writer
+
+	go func() { // write to the pipe in a separate goroutine
+		pw.Write([]byte("Hello Pipe")) // write data to the pipe writer
+		pw.Close()                     // close the writer
+	}()
+
+	buf := new(bytes.Buffer)  // create a buffer instance (heap memory, returns a pointer)
+	buf.ReadFrom(pr)          // read from the pipe reader into the buffer
+	fmt.Println(buf.String()) // prints the buffer content as string.
+}
+
+func writeToFile(filepath string, data string) { // demonsrtrates writing data to a file
+	file, err := os.OpenFile(filepath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644) // creates or opens the file for appending data at learn-go/io_file.txt
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+	defer closeResource(file) // ensure the file is closed after writing
+
+	_, err = file.Write([]byte(data)) // write data to the file
+	if err != nil {
+		log.Fatalln("Error :", err)
+	}
+
+	// Alternatively, we can use io.Writer interface to write to the file as shown below (type conversion) :
+
+	// writer := io.Writer(file)
+	// _, err = writer.Write([]byte(data))
+	// if err != nil {
+	// 	log.Fatalln("Error :", err)
+	// }
+}
+
+func main() {
+	readFromReader(strings.NewReader("Hello Reader")) // passing a strings.Reader which implements io.Reader. Prints the output as Hello Reader.
+
+	var writer bytes.Buffer                // creates a buffer instance (stack memory, not a pointer)
+	writeToWriter(&writer, "Hello Writer") // writes data to the buffer.
+	fmt.Println(writer.String())           // prints the buffer content as string. Prints the output as Hello Writer.
+
+	bufferExample() // prints the output as Hello Buffer
+
+	multiReaderExample() // prints the output as Hello MultiReader
+
+	pipeExample() // prints the output as Hello Pipe
+
+	writeToFile("io_file.txt", "Hello File") // appends the data Hello File to the file learn-go/io_file.txt
+
+	myRes := &myResource{name: "TestResource"} // creates an instance of myResource
+	closeResource(myRes)                       // prints output as Closing resource : TestResource
+}
