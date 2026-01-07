@@ -1,0 +1,49 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// In unbuffered channels, we send a value into the channel or receive a value from a channel, it will block the execution until the value is received from the channel or the value is sent into the channel respectively.
+
+func main() {
+	// _______________Waiting for the sender to send into the channel__________________________________________________________________
+
+	channel1 := make(chan int) // unbuffered channel of type int
+
+	go func() {
+		time.Sleep(2 * time.Second) // simulating some work with sleep
+		channel1 <- 42
+	}()
+
+	receivedValue1 := <-channel1 // this statement will block execution of the main function until a value is sent into the channel1.
+	fmt.Println(receivedValue1)
+
+	// _______________Waiting for the receiver to receive from the channel_____________________________________________________________
+
+	channel2 := make(chan int) // unbuffered channel of type int
+
+	go func() {
+		time.Sleep(2 * time.Second)  // simulating some work with sleep
+		receivedValue2 := <-channel2 // this statement will block execution of the goroutine until a value is sent into the channel2.
+		fmt.Println(receivedValue2)
+	}()
+
+	channel2 <- 84 // this statement will block execution of the main function until a value is received from the channel2.
+
+	// ______________Waiting for all goroutines to finish_____________________________________________________________________________
+
+	channel3 := make(chan string) // unbuffered channel of type string
+
+	go func() {
+		time.Sleep(2 * time.Second) // simulating some work with sleep for 2 seconds
+	}()
+
+	go func() {
+		time.Sleep(4 * time.Second) // simulating some work with sleep for 4 seconds
+	}()
+
+	receivedValue3 := <-channel3 // it will throw an error. It will wait for 4 seconds in total because the second goroutine takes 4 seconds to finish. It assumes that some goroutine will send a value into the channel3 after finishing its work. Same thing applies for sending into the channel as well.
+	fmt.Println(receivedValue3)  // since no goroutine sent a value into the channel3, this line will never be executed.
+}
