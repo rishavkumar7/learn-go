@@ -1,0 +1,41 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// ___________channel between a goroutine and the main goroutine_________________
+
+	channel1 := make(chan string) // creating a channel of type string
+
+	go func() { // starting a new goroutine. Note that this is an unblocking statement.
+		channel1 <- "Hello" // passing the first string value into the channel1
+		channel1 <- "World" // passing the second string value into the channel1
+	}()
+
+	receiver1 := <-channel1 // receiving the first string value from the channel1. Note that this is a blocking statement.
+	fmt.Println(receiver1)
+	receiver1 = <-channel1 // receiving the second string value from the channel1. Note that this is a blocking statement.
+	fmt.Println(receiver1)
+
+	// ___________channel between two goroutines______________________________________
+
+	channel2 := make(chan int) // creating a channel of type int
+
+	go func() { // starting the first goroutine. Note that this is an unblocking statement.
+		for i := range 5 { // looping 5 times
+			channel2 <- i // passing the int value into the channel2
+		}
+	}()
+
+	go func() { // starting the second goroutine. Note that this is an unblocking statement.
+		for range 5 { // looping 5 times
+			receiver2 := <-channel2 // receiving the int value from the channel2. Note that this is a blocking statement but it will only block this goroutine and the main goroutine will continue executing.
+			fmt.Println(receiver2)
+		}
+	}()
+
+	time.Sleep(time.Second) // sleeping the main goroutine for 1 second to allow the above goroutines to complete their execution
+}
