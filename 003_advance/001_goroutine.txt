@@ -1,0 +1,68 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Goroutines are just functions that leave the main thread and run in the background and come back to join the main thread once the functions are finished or ready to return the value.
+// Goroutines do not stop the program flow and are non-blocking.
+
+func main() {
+	// ________Demonstrating Goroutine Leak__________________________________________________
+	go sayHello()               // if the main() function ends before sayHello() function completes, then we won't see the output of sayHello(). This condition is called a "goroutine leak".
+	time.Sleep(2 * time.Second) // Adding sleep in main to allow sayHello to complete before main exits (as its a blocking statement).
+
+	// ________Demonstrating Gouroutine works independently__________________________________
+	go printNumbers()           // Launch printNumbers as a goroutine
+	go printAlphabets()         // Launch printAlphabets as a goroutine
+	time.Sleep(2 * time.Second) // Sleep to allow goroutines to finish before main exits
+
+	// ________Executing multiple statements using goroutines________________________________
+	var err error
+	go func() { // Anonymous goroutine to execute multiple statements
+		err = checkError() // assigning the error returned by checkError() function to err variable.
+	}()
+	if err != nil { // Immediately checking err after launching goroutine will likely show nil, as the goroutine hasn't completed yet.
+		fmt.Println("Error :", err)
+	} else {
+		fmt.Println("Success: No error occurred")
+	}
+	time.Sleep(2 * time.Second) // Waiting to allow goroutine to complete
+	if err != nil {             // Checking err again after waiting to allow goroutine to complete. This time it should show the error.
+		fmt.Println("Error :", err)
+	} else {
+		fmt.Println("Success: No error occurred")
+	}
+}
+
+func sayHello() {
+	fmt.Println("Begin sayHello") // Indicates the start of the sayHello() function.
+	time.Sleep(time.Second)       // Blocks execution of sayHello() for 1 second to simulate a time-consuming task.
+	fmt.Println("End sayHello")   // Indicates the end of the sayHello() function.
+}
+
+func printNumbers() {
+	for i := 1; i <= 5; i++ {
+		fmt.Println(i)
+		time.Sleep(100 * time.Millisecond) // Simulate some work with a sleep
+	}
+}
+
+func printAlphabets() {
+	for _, ch := range "abcde" {
+		fmt.Printf("%c\n", ch)
+		time.Sleep(200 * time.Millisecond) // Simulate some work with a sleep
+	}
+}
+
+func checkError() error {
+	time.Sleep(time.Second)                   // Simulate some work with a sleep
+	return fmt.Errorf("Some error occurred.") // Returning a sample error after a delay
+}
+
+// When a goroutine is created, the program continues executing the next statements without waiting for the goroutine to finish.
+// Goroutines run concurrently with the main program and other goroutines.
+// If the main function exits before the goroutine completes, the goroutine will be terminated prematurely.
+// Goroutines are lightweight and managed by the Go runtime, allowing for efficient concurrent execution of functions.
+// Goroutines are independent of each other.
