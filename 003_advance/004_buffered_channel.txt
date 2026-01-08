@@ -1,0 +1,60 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Buffered channels allow some storage space for the values being sent to the channel.
+// This means that the sender can send multiple values to the channel without waiting for a corresponding receiver to receive those values, up to the capacity of the buffer. This can help improve performance and reduce blocking in certain scenarios.
+// Blocking in buffered channels only happen when the buffer is full (for send operations) or empty (for receive operations).
+
+func main() {
+	// __________________Using Buffered Channel without goroutine___________________________________________________________
+
+	channel1 := make(chan int, 2)      // creating a buffered channel with capacity of 2 integer values
+	channel1 <- 1                      // this will put 1 in the buffer and occupy one space in the buffer
+	channel1 <- 2                      // this will put 2 in the buffer and occupy another space in the buffer
+	fmt.Println("Value :", <-channel1) // this will print 1 and empty one space in the buffer
+	channel1 <- 3                      // this will put 3 in the buffer and occupy one space in the buffer. If the buffer would have been full, this line would have caused a deadlock as there was space for only 2 integer values in the buffer.
+	fmt.Println("Value :", <-channel1) // this will print 2 and empty one space in the buffer
+
+	// __________________Using Buffered Channel with goroutine______________________________________________________________
+
+	channel2 := make(chan int, 2) // creating a buffered channel with capacity of 2 integer values
+	channel2 <- 1                 // this will put 1 in the buffer and occupy one space in the buffer
+	channel2 <- 2                 // this will put 2 in the buffer and occupy another space in the buffer
+
+	go func() {
+		time.Sleep(2 * time.Second)        // simulating some processing time
+		fmt.Println("Value :", <-channel2) // this will print 1 and empty one space in the buffer
+	}()
+
+	fmt.Println("Blocking until the goroutine finishes executing...")
+	channel2 <- 3 // this line will block until the goroutine finishes executing as it expects that the goroutine will cause some changes to the channel buffer. after the goroutine executes, one space in the buffer will be empty and this line can put 3 in the buffer.
+	fmt.Println("Blocking over, goroutine has finished executing.")
+	fmt.Println("Value :", <-channel2) // this will print 2 and empty one space in the buffer
+
+	// _________________Blocking in Buffered Channels_______________________________________________________________________
+
+	channel3 := make(chan int, 2)
+	channel3 <- 1 // this will put 1 in the buffer and occupy one space in the buffer
+	channel3 <- 2 // this will put 2 in the buffer and occupy another space in the buffer
+	// channel3 <- 3                // this line would cause a deadlock as the buffer is already full with 2 integer values
+	fmt.Println("Value :", <-channel3) // this will print 1 and empty one space in the buffer
+	fmt.Println("Value :", <-channel3) // this will print 2 and empty another space in the buffer. Now the buffer is empty.
+	// fmt.Println("Value :", <-channel3) // this line would cause a deadlock as the buffer is already empty
+
+	// _________________Special Case________________________________________________________________________________________
+
+	channel4 := make(chan int, 2) // creating a buffered channel with capacity of 2 integer values
+	channel4 <- 1                 // this will put 1 in the buffer and occupy one space in the buffer
+	channel4 <- 2                 // this will put 2 in the buffer and occupy another space in the buffer
+
+	go func() {
+		time.Sleep(2 * time.Second)        // simulating some processing time
+		fmt.Println("Value :", <-channel4) // executing statement from right to left.Sometimes, as soon as it reads from channel4, it will empty one space in the buffer and before the printing happens, the main goroutine which was blocked due to this goroutine as it was expecting some changes in the buffer, will put 3 in the buffer and the program ends before printing this line.
+	}()
+
+	channel4 <- 3 // sometimes this statement will be executed before the printing happens in the goroutine above and the program ends before printing the goroutine's print statement.
+}
