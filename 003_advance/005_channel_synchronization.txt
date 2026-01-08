@@ -1,0 +1,22 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	channel := make(chan string) // creates an unbuffered channel of type string
+
+	go func() {
+		for i := range 5 {
+			channel <- fmt.Sprintf("Value %d, %v\n", i, time.Now()) // sends value to the channel
+			time.Sleep(100 * time.Millisecond)                      // simulates some work
+		}
+		close(channel) // closes the channel after the last sent value is received. After that the receiver only receives the zero value of the channel type.
+	}()
+
+	for value := range channel { // loops over only on the active channel, creates receiver each time and stops creating receiver (stops looping) when channel is closed.
+		fmt.Print(value)
+	}
+}
