@@ -1,0 +1,33 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// ____________Bi-directional channel__________________________________
+
+	channel1 := make(chan int) // creating a bidirectional unbuffered channel
+	go producer(channel1)      // calling the producer function
+	consumer(channel1)         // calling the consumer function
+
+	// ____________Uni-directional channel_________________________________
+
+	_ = make(chan<- int) // creating the send-only unbuffered channel
+	_ = make(<-chan int) // creating the receive-only unbuffered channel
+}
+
+func producer(ch chan<- int) { // parameter 'ch' is of send-only type
+	for i := range 5 {
+		ch <- i                            // send the value into the channel
+		time.Sleep(100 * time.Millisecond) // simulating some work
+	}
+	close(ch) // closing the channel after last sent value is received
+}
+
+func consumer(ch <-chan int) { // parameter 'ch' is of receiver-only type
+	for value := range ch { // looping through the channel to receive the value from it as soon as any value is sent into the channel through the producer.
+		fmt.Println("Value :", value)
+	}
+}
