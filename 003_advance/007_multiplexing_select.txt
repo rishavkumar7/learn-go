@@ -1,0 +1,89 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	// ______________Executing multiple channels using Select__________________________________
+
+	channel1 := make(chan int)
+	channel2 := make(chan int)
+
+	go func() {
+		time.Sleep(time.Second)
+		channel1 <- 1
+	}()
+
+	go func() {
+		time.Sleep(2 * time.Second)
+		channel2 <- 1
+	}()
+
+	for range 2 {
+		select {
+		case val := <-channel1:
+			fmt.Println("Channel1 :", val)
+		case val := <-channel2:
+			fmt.Println("Channel2 :", val)
+		}
+	}
+
+	// _______________Handling the edge case using select______________________________________
+
+	channel3 := make(chan int)
+	channel4 := make(chan int)
+
+	select {
+	case val := <-channel3: // this channel doesn't have any value so this case would not be reached.
+		fmt.Println("Channel3 :", val)
+	case val := <-channel4: // this channel also doesn't have any value so this case would also not be reached.
+		fmt.Println("Channel4 :", val)
+	default: // it doesn't let the select statement to block if no channel is ready.
+		fmt.Println("No channels found.")
+	}
+
+	// _______________Handling the timeout using select________________________________________
+
+	channel5 := make(chan int)
+
+	go func() {
+		time.Sleep(4 * time.Second) // it waits for 4 seconds before proceeding.
+		channel5 <- 1
+	}()
+
+	select {
+	case val := <-channel5: // this will not be executed as timeout occurs after 3 seconds but it will take 4 seconds.
+		fmt.Println("Channel5 :", val)
+	case <-time.After(3 * time.Second): // it waits and blocks for sometime and then proceeds with timeout. time.After() waits for said amount of time and then returns a channel holding the current time.
+		fmt.Println("Timeout.")
+	}
+
+	// ________________Handling the infinite loop using select_________________________________
+
+	channel6 := make(chan int)
+
+	go func() {
+		time.Sleep(time.Second)
+		channel6 <- 1
+		close(channel6) // closes the channel after the last sent value is received and converts the ok to false.
+	}()
+
+	for {
+		select {
+		case val, ok := <-channel6: // ok stores the bool value whether the channel is closed and empty or open.
+			if !ok { // this prevents the infinite loop as it enters this condition as soon as the channel is closed.
+				fmt.Println("Channel6 has been closed.")
+				return
+			}
+			fmt.Println("Channel6 :", val)
+		case <-time.After(3 * time.Second):
+			fmt.Println("Timeout reached.")
+		}
+	}
+}
+
+// if none of the cases match, it will proceed with the default case.
+// if any case of the select is matched first, it would proceed with that case.
+// if multiple cases of the select matches, it will proceed with any of those and ignore the rest.
