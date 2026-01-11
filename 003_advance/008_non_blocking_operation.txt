@@ -1,0 +1,59 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Without default - wait until any case matches.
+// With default - check all cases once and proceed with default without waiting.
+
+func main() {
+	// ________________Non-blocking send operation________________________________
+
+	channel1 := make(chan int)
+
+	select { // since its an unbuffered channel, it would also need a receive from channel1 therefore the default case will be executed as there is no receive from channel1.
+	case channel1 <- 1:
+		fmt.Println("Sent value into the channel1.")
+	default:
+		fmt.Println("Default reached for channel1.")
+	}
+
+	// ________________Non-blocking receive operation_____________________________
+
+	channel2 := make(chan int)
+
+	select { // since its an unbuffered channel, it would also need a send to channel2 therefore the default case will be executed as there is no send to channel2.
+	case val := <-channel2:
+		fmt.Println("Received value :", val)
+	default:
+		fmt.Println("Default reached for channel2.")
+	}
+
+	// ________________Non-blocking live data exchange____________________________
+
+	channel3 := make(chan int)
+	channel4 := make(chan bool)
+
+	go func() {
+		for { // loop continues infinitely until quitted or main() function exits.
+			select {
+			case val := <-channel3: // data exchange case : receive data from channel3
+				fmt.Println("Value :", val)
+			case <-channel4: // quitting case : through channel4
+				fmt.Println("Stopping...")
+				return
+			default: // waiting case
+				fmt.Println("Waiting for data...")
+				time.Sleep(200 * time.Millisecond)
+			}
+		}
+	}()
+
+	for i := range 5 {
+		channel3 <- i // send data into the channel3
+		time.Sleep(time.Second)
+	}
+	channel4 <- true // exit the goroutine through channel4
+}
